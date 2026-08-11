@@ -1,29 +1,24 @@
-import { weatherThemes } from "./themes/weatherThemes";
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
 
 function App() {
-  const theme = weatherThemes.sunny;
-
   return (
-    <div
-      style={{
-        backgroundColor: theme.background,
-        color: theme.text,
-        minHeight: "100vh",
-      }}
-    >
-      <h1>Weather Dashboard</h1>
+    <div className="flex min-h-screen bg-[#F4FAF6]">
+      <Sidebar />
 
-      <p>Sunny Theme</p>
+      <main className="flex-1 p-8">
+        <Header />
 
-      <div
-        style={{
-          backgroundColor: theme.card,
-          padding: "20px",
-          borderRadius: "16px",
-        }}
-      >
-        Weather Card
-      </div>
+        <div className="mt-8">
+          <h3 className="text-xl font-semibold text-gray-800">
+            Dashboard
+          </h3>
+
+          <p className="mt-2 text-gray-500">
+            Your weather information will appear here.
+          </p>
+        </div>
+      </main>
     </div>
   );
 }
