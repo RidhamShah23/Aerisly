@@ -25,6 +25,11 @@ import {
 } from "./utils/activityUtils";
 
 import ActivityRecommendation from "./components/ActivityRecommendation";
+import AirQuality from "./components/AirQuality";
+
+import type {
+  AirQuality as AirQualityType,
+} from "./types/weather";
 
 const weather: CurrentWeatherType = {
   city: "Ahmedabad",
@@ -35,6 +40,15 @@ const weather: CurrentWeatherType = {
   windSpeed: 12,
   uvIndex: 6,
 };
+
+const airQuality: AirQualityType = {
+  aqi: 42,
+  pm25: 12,
+  pm10: 24,
+  ozone: 38,
+  nitrogenDioxide: 18,
+};
+
 const forecast: ForecastDay[] = [
   {
     day: "Mon",
@@ -205,6 +219,12 @@ const scoredActivities = activities.map((activity) => ({
 <div className="mt-8">
   <ActivityRecommendation
     activities={scoredActivities}
+    theme={theme}
+  />
+</div>
+<div className="mt-8">
+  <AirQuality
+    airQuality={airQuality}
     theme={theme}
   />
 </div>

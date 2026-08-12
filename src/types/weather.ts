@@ -43,3 +43,11 @@ export interface Activity {
   type: ActivityType;
   score: number;
 }
+
+export interface AirQuality {
+  aqi: number;
+  pm25: number;
+  pm10: number;
+  ozone: number;
+  nitrogenDioxide: number;
+}
