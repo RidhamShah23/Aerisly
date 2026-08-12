@@ -8,6 +8,7 @@ import type {
   CurrentWeather as CurrentWeatherType,
   WeatherCondition,
   ForecastDay,
+  Activity,
 } from "./types/weather";
 import {
   Drop,
@@ -16,6 +17,15 @@ import {
 } from "@phosphor-icons/react";
 import WeatherStatCard from "./components/WeatherStatCard";
 import ForecastCard from "./components/ForecastCard";
+import TemperatureChart from "./components/TemperatureChart";
+import type { RainForecast } from "./types/weather";
+import RainTimeline from "./components/RainTimeline";
+import {
+  calculateActivityScore,
+} from "./utils/activityUtils";
+
+import ActivityRecommendation from "./components/ActivityRecommendation";
+
 const weather: CurrentWeatherType = {
   city: "Ahmedabad",
   temperature: 32,
@@ -58,9 +68,75 @@ const forecast: ForecastDay[] = [
   },
 ];
 
+const rainForecast: RainForecast[] = [
+  {
+    time: "Now",
+    probability: 5,
+  },
+  {
+    time: "30 min",
+    probability: 12,
+  },
+  {
+    time: "60 min",
+    probability: 58,
+  },
+  {
+    time: "90 min",
+    probability: 82,
+  },
+  {
+    time: "120 min",
+    probability: 74,
+  },
+];
+
+const activities: Activity[] = [
+  {
+    name: "Running",
+    type: "outdoor",
+    score: 0,
+  },
+  {
+    name: "Walking",
+    type: "outdoor",
+    score: 0,
+  },
+  {
+    name: "Cycling",
+    type: "outdoor",
+    score: 0,
+  },
+  {
+    name: "Picnic",
+    type: "outdoor",
+    score: 0,
+  },
+  {
+    name: "Indoor Movie",
+    type: "indoor",
+    score: 0,
+  },
+];
+
 function App() {
   const [condition, setCondition] = useState<WeatherCondition>("sunny");
   const theme = weatherThemes[condition];
+  const activityWeather = {
+  temperature: weather.temperature,
+  humidity: weather.humidity,
+  rainProbability: 10,
+  windSpeed: weather.windSpeed,
+  uvIndex: weather.uvIndex,
+};
+
+const scoredActivities = activities.map((activity) => ({
+  ...activity,
+  score: calculateActivityScore(
+    activity,
+    activityWeather
+  ),
+}));
   return (
    <div
   className="flex min-h-screen transition-colors duration-500"
@@ -117,6 +193,21 @@ function App() {
       />
     ))}
   </div>
+  <div className="mt-8">
+  <TemperatureChart theme={theme} />
+</div>
+<div className="mt-8">
+  <RainTimeline
+    forecast={rainForecast}
+    theme={theme}
+  />
+</div>
+<div className="mt-8">
+  <ActivityRecommendation
+    activities={scoredActivities}
+    theme={theme}
+  />
+</div>
 </div>
         </div>
         <div className="mt-6">

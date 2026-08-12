@@ -31,3 +31,15 @@ export interface ForecastDay{
   high: number;
   low:number;
 }
+export interface RainForecast {
+  time: string;
+  probability: number;
+}
+
+export type ActivityType = "outdoor" | "indoor";
+
+export interface Activity {
+  name: string;
+  type: ActivityType;
+  score: number;
+}
