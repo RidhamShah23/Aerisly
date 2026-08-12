@@ -5,14 +5,16 @@ import {
   CloudRain,
   Gear,
 } from "@phosphor-icons/react";
-
+import type { WeatherTheme } from "../types/weather";
 import type { Icon } from "@phosphor-icons/react";
 
 interface NavItem {
   label: string;
   icon: Icon;
 }
-
+interface SidebarProps {
+  theme: WeatherTheme;
+}
 const navItems: NavItem[] = [
   {
     label: "Dashboard",
@@ -36,9 +38,13 @@ const navItems: NavItem[] = [
   },
 ];
 
-function Sidebar() {
-  return (
-    <aside className="w-64 min-h-screen bg-white border-r border-gray-100 p-6">
+function Sidebar({ theme }: SidebarProps) {
+    return (
+    <aside style={{
+  backgroundColor: theme.card,
+  color: theme.text,
+  borderColor: theme.mutedText,
+}}  className="w-64 min-h-screen border-r border-gray-100 p-6">
       <h1 className="text-2xl font-bold text-green-600 mb-10">
         Weatherly
       </h1>

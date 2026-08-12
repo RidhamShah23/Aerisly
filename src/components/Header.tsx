@@ -1,8 +1,16 @@
 import { MagnifyingGlass, Bell, MapPin } from "@phosphor-icons/react";
+import type { WeatherTheme } from "../types/weather";
 
-function Header() {
-  return (
-    <header className="flex items-center justify-between gap-6">
+interface HeaderProps {
+  theme: WeatherTheme;
+}
+
+function Header({ theme }: HeaderProps) {
+    return (
+    <header style={{
+  backgroundColor: theme.card,
+  color: theme.text,
+}} className="flex items-center justify-between gap-6">
       {/* Greeting */}
       <div>
         <p className="text-sm text-gray-500">Good evening</p>

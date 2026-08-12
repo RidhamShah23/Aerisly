@@ -15,3 +15,19 @@ export type WeatherCondition =
   text: string;
   mutedText: string;
 }
+
+export interface CurrentWeather {
+  city: string;
+  temperature: number;
+  condition: string;
+  feelsLike: number;
+  humidity: number;
+  windSpeed: number;
+  uvIndex: number;
+}
+export interface ForecastDay{
+  day: string;
+  condition: WeatherCondition;
+  high: number;
+  low:number;
+}
