@@ -6,6 +6,11 @@ import type {
 } from "../types/weather";
 
 import type { WeatherApiResponse } from "../services/weatherApi";
+import type { AirQuality } from "../types/weather";
+
+import type {
+  AirQualityApiResponse,
+} from "../services/airQualityApi";
 
 export type RainLevel =
   | "Low"
@@ -170,4 +175,30 @@ function formatHour(time: string): string {
       hour12: true,
     }
   );
+}
+
+export function mapAirQuality(
+  data: AirQualityApiResponse
+): AirQuality {
+  return {
+    aqi: Math.round(
+      data.current.us_aqi
+    ),
+
+    pm25: Math.round(
+      data.current.pm2_5
+    ),
+
+    pm10: Math.round(
+      data.current.pm10
+    ),
+
+    ozone: Math.round(
+      data.current.ozone
+    ),
+
+    nitrogenDioxide: Math.round(
+      data.current.nitrogen_dioxide
+    ),
+  };
 }

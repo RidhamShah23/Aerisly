@@ -35,16 +35,10 @@ import {
   mapCurrentWeather,
   mapForecast,
   mapHourlyWeather,
+  mapAirQuality,
 } from "./utils/weatherUtils";
 
-
-const airQuality: AirQualityType = {
-  aqi: 42,
-  pm25: 12,
-  pm10: 24,
-  ozone: 38,
-  nitrogenDioxide: 18,
-};
+import { getAirQuality } from "./services/airQualityApi";
 
 const activities: Activity[] = [
   {
@@ -75,7 +69,7 @@ const activities: Activity[] = [
 ];
 
 function App() {
-  const [weather,setweather]=
+  const [weather,setWeather]=
 useState<CurrentWeatherType>({
   city: "Ahmedabad",
   temperature: 32,
@@ -107,27 +101,39 @@ const handleCitySelect = async (
       location.longitude
     );
 
-    const currentWeather = mapCurrentWeather(
-      data,
-      location.name
-    );
+    const airQualityData =
+      await getAirQuality(
+        location.latitude,
+        location.longitude
+      );
 
-    setweather(currentWeather);
+    const currentWeather =
+      mapCurrentWeather(
+        data,
+        location.name
+      );
 
-    const currentForecast = mapForecast(data);
-    const currentHourly = mapHourlyWeather(data);
+    const currentForecast =
+      mapForecast(data);
 
-setHourlyWeather(currentHourly);
-    setweather(currentWeather);
+    const currentHourly =
+      mapHourlyWeather(data);
+
+    const currentAirQuality =
+      mapAirQuality(airQualityData);
+
+    setWeather(currentWeather);
     setForecast(currentForecast);
-    console.log("Updated weather:", currentWeather);
+    setHourlyWeather(currentHourly);
+    setAirQuality(currentAirQuality);
+
   } catch (error) {
     console.error(
       "Weather fetch failed:",
       error
     );
   }
-};
+};;
 
 const scoredActivities = activities.map((activity) => ({
   ...activity,
@@ -139,6 +145,8 @@ const scoredActivities = activities.map((activity) => ({
 const [hourlyWeather, setHourlyWeather] =
   useState<HourlyWeather[]>([]);
 
+  const [airQuality, setAirQuality] =
+  useState<AirQualityType | null>(null);
   return (
     <div
       className="flex min-h-screen transition-colors duration-500"
@@ -248,10 +256,12 @@ const [hourlyWeather, setHourlyWeather] =
           {/* Air Quality */}
 
           <div className="mt-8">
-            <AirQuality
-              airQuality={airQuality}
-              theme={theme}
-            />
+           {airQuality && (
+  <AirQuality
+    airQuality={airQuality}
+    theme={theme}
+  />
+)}
           </div>
 
         </div>
