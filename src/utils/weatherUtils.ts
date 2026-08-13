@@ -1,6 +1,8 @@
 import type {
   CurrentWeather,
   WeatherCondition,
+  ForecastDay,
+  HourlyWeather,
 } from "../types/weather";
 
 import type { WeatherApiResponse } from "../services/weatherApi";
@@ -112,11 +114,6 @@ export function mapCurrentWeather(
   };
 }
 
-import type {
-  ForecastDay,
-} from "../types/weather";
-
-
 export function mapForecast(
   data: WeatherApiResponse
 ): ForecastDay[] {
@@ -140,4 +137,37 @@ function formatForecastDay(date: string): string {
   return new Date(date).toLocaleDateString("en-US", {
     weekday: "short",
   });
+}
+export function mapHourlyWeather(
+  data: WeatherApiResponse
+): HourlyWeather[] {
+  const now = Date.now();
+
+  const startIndex = data.hourly.time.findIndex(
+    (time) => new Date(time).getTime() >= now
+  );
+
+  const index =
+    startIndex === -1 ? 0 : startIndex;
+
+  return data.hourly.time
+    .slice(index, index + 8)
+    .map((time, i) => ({
+      time: formatHour(time),
+      temperature: Math.round(
+        data.hourly.temperature_2m[index + i]
+      ),
+      rainProbability:
+        data.hourly.precipitation_probability[index + i],
+    }));
+}
+
+function formatHour(time: string): string {
+  return new Date(time).toLocaleTimeString(
+    "en-US",
+    {
+      hour: "numeric",
+      hour12: true,
+    }
+  );
 }

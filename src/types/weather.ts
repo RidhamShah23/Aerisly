@@ -51,3 +51,9 @@ export interface AirQuality {
   ozone: number;
   nitrogenDioxide: number;
 }
+
+export interface HourlyWeather {
+  time: string;
+  temperature: number;
+  rainProbability: number;
+}

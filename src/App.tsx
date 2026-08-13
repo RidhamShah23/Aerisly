@@ -17,8 +17,6 @@ import {
 import WeatherStatCard from "./components/WeatherStatCard";
 import ForecastCard from "./components/ForecastCard";
 import TemperatureChart from "./components/TemperatureChart";
-import type { RainForecast } from "./types/weather";
-import RainTimeline from "./components/RainTimeline";
 import {
   calculateActivityScore,
 } from "./utils/activityUtils";
@@ -32,9 +30,11 @@ import type {
 
 import type { LocationResult } from "./services/geocodingApi";
 import { getWeather } from "./services/weatherApi";
+import type {HourlyWeather} from "./types/weather";
 import {
   mapCurrentWeather,
   mapForecast,
+  mapHourlyWeather,
 } from "./utils/weatherUtils";
 
 
@@ -45,30 +45,6 @@ const airQuality: AirQualityType = {
   ozone: 38,
   nitrogenDioxide: 18,
 };
-
-
-const rainForecast: RainForecast[] = [
-  {
-    time: "Now",
-    probability: 5,
-  },
-  {
-    time: "30 min",
-    probability: 12,
-  },
-  {
-    time: "60 min",
-    probability: 58,
-  },
-  {
-    time: "90 min",
-    probability: 82,
-  },
-  {
-    time: "120 min",
-    probability: 74,
-  },
-];
 
 const activities: Activity[] = [
   {
@@ -139,7 +115,9 @@ const handleCitySelect = async (
     setweather(currentWeather);
 
     const currentForecast = mapForecast(data);
+    const currentHourly = mapHourlyWeather(data);
 
+setHourlyWeather(currentHourly);
     setweather(currentWeather);
     setForecast(currentForecast);
     console.log("Updated weather:", currentWeather);
@@ -158,6 +136,9 @@ const scoredActivities = activities.map((activity) => ({
     activityWeather
   ),
 }));
+const [hourlyWeather, setHourlyWeather] =
+  useState<HourlyWeather[]>([]);
+
   return (
     <div
       className="flex min-h-screen transition-colors duration-500"
@@ -249,21 +230,10 @@ const scoredActivities = activities.map((activity) => ({
           {/* Temperature Chart */}
 
           <div className="mt-8">
-            <TemperatureChart
-              theme={theme}
-            />
-          </div>
-
-
-          {/* Rain Timeline */}
-
-          <div className="mt-8">
-            <RainTimeline
-              forecast={rainForecast}
-              theme={theme}
-            />
-          </div>
-
+<TemperatureChart
+  theme={theme}
+  hourlyWeather={hourlyWeather}
+/> </div>
 
           {/* Activity Recommendation */}
 
