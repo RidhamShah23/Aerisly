@@ -34,6 +34,7 @@ import type { LocationResult } from "./services/geocodingApi";
 import { getWeather } from "./services/weatherApi";
 import {
   mapCurrentWeather,
+  mapForecast,
 } from "./utils/weatherUtils";
 
 
@@ -45,38 +46,6 @@ const airQuality: AirQualityType = {
   nitrogenDioxide: 18,
 };
 
-const forecast: ForecastDay[] = [
-  {
-    day: "Mon",
-    condition: "sunny",
-    high: 32,
-    low: 24,
-  },
-  {
-    day: "Tue",
-    condition: "rainy",
-    high: 29,
-    low: 22,
-  },
-  {
-    day: "Wed",
-    condition: "cloudy",
-    high: 30,
-    low: 23,
-  },
-  {
-    day: "Thu",
-    condition: "sunny",
-    high: 33,
-    low: 25,
-  },
-  {
-    day: "Fri",
-    condition: "cloudy",
-    high: 31,
-    low: 24,
-  },
-];
 
 const rainForecast: RainForecast[] = [
   {
@@ -140,6 +109,8 @@ useState<CurrentWeatherType>({
   windSpeed: 12,
   uvIndex: 6,
 });
+const [forecast, setForecast] =
+  useState<ForecastDay[]>([]);
 
 
 const theme = weatherThemes[weather.condition];
@@ -167,6 +138,10 @@ const handleCitySelect = async (
 
     setweather(currentWeather);
 
+    const currentForecast = mapForecast(data);
+
+    setweather(currentWeather);
+    setForecast(currentForecast);
     console.log("Updated weather:", currentWeather);
   } catch (error) {
     console.error(

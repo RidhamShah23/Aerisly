@@ -111,3 +111,33 @@ export function mapCurrentWeather(
     ),
   };
 }
+
+import type {
+  ForecastDay,
+} from "../types/weather";
+
+
+export function mapForecast(
+  data: WeatherApiResponse
+): ForecastDay[] {
+  return data.daily.time.map((date, index) => ({
+    day: formatForecastDay(date),
+
+    condition: getWeatherCondition(
+      data.daily.weather_code[index]
+    ),
+
+    high: Math.round(
+      data.daily.temperature_2m_max[index]
+    ),
+
+    low: Math.round(
+      data.daily.temperature_2m_min[index]
+    ),
+  }));
+}
+function formatForecastDay(date: string): string {
+  return new Date(date).toLocaleDateString("en-US", {
+    weekday: "short",
+  });
+}
