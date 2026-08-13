@@ -11,12 +11,16 @@ import { searchCity } from "../services/geocodingApi";
 
 interface HeaderProps {
   theme: WeatherTheme;
-  onCitySelect: (location: LocationResult) => void;
+  onCitySelect: (
+    location: LocationResult
+  ) => void;
+  onCurrentLocation: () => void;
 }
 
 function Header({
   theme,
   onCitySelect,
+  onCurrentLocation,
 }: HeaderProps) {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState<LocationResult[]>([]);
@@ -165,21 +169,21 @@ function Header({
         </div>
 
         {/* Current Location */}
-        <button
-          className="flex items-center gap-2 rounded-xl border px-4 py-3"
-          style={{
-            backgroundColor: theme.card,
-            borderColor: theme.mutedText,
-            color: theme.text,
-          }}
-        >
-          <MapPin size={20} />
+       <button
+  onClick={onCurrentLocation}
+  className="flex items-center gap-2 rounded-xl border px-4 py-3"
+  style={{
+    backgroundColor: theme.card,
+    borderColor: theme.mutedText,
+    color: theme.text,
+  }}
+>
+  <MapPin size={20} />
 
-          <span className="text-sm">
-            Ahmedabad
-          </span>
-        </button>
-
+  <span className="text-sm">
+    Current Location
+  </span>
+</button>
         {/* Notification */}
         <button
           className="rounded-xl border p-3"

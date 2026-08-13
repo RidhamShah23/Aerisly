@@ -39,6 +39,9 @@ import {
 } from "./utils/weatherUtils";
 
 import { getAirQuality } from "./services/airQualityApi";
+import {
+  getCurrentLocation,
+} from "./services/location";
 
 const activities: Activity[] = [
   {
@@ -96,28 +99,33 @@ const handleCitySelect = async (
   location: LocationResult
 ) => {
   try {
-    const data = await getWeather(
-      location.latitude,
-      location.longitude
-    );
+    setIsLoading(true);
+    setError(null);
 
-    const airQualityData =
-      await getAirQuality(
-        location.latitude,
-        location.longitude
-      );
+    const [weatherData, airQualityData] =
+      await Promise.all([
+        getWeather(
+          location.latitude,
+          location.longitude
+        ),
+
+        getAirQuality(
+          location.latitude,
+          location.longitude
+        ),
+      ]);
 
     const currentWeather =
       mapCurrentWeather(
-        data,
+        weatherData,
         location.name
       );
 
     const currentForecast =
-      mapForecast(data);
+      mapForecast(weatherData);
 
     const currentHourly =
-      mapHourlyWeather(data);
+      mapHourlyWeather(weatherData);
 
     const currentAirQuality =
       mapAirQuality(airQualityData);
@@ -132,8 +140,15 @@ const handleCitySelect = async (
       "Weather fetch failed:",
       error
     );
+
+    setError(
+      "Couldn't load weather data. Please try again."
+    );
+
+  } finally {
+    setIsLoading(false);
   }
-};;
+};
 
 const scoredActivities = activities.map((activity) => ({
   ...activity,
@@ -147,6 +162,65 @@ const [hourlyWeather, setHourlyWeather] =
 
   const [airQuality, setAirQuality] =
   useState<AirQualityType | null>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState<string | null>(null);
+const handleCurrentLocation = async () => {
+  try {
+    setIsLoading(true);
+    setError(null);
+
+    const coordinates =
+      await getCurrentLocation();
+
+    const [weatherData, airQualityData] =
+      await Promise.all([
+        getWeather(
+          coordinates.latitude,
+          coordinates.longitude
+        ),
+
+        getAirQuality(
+          coordinates.latitude,
+          coordinates.longitude
+        ),
+      ]);
+
+    const currentWeather =
+      mapCurrentWeather(
+        weatherData,
+        "Current Location"
+      );
+
+    const currentForecast =
+      mapForecast(weatherData);
+
+    const currentHourly =
+      mapHourlyWeather(weatherData);
+
+    const currentAirQuality =
+      mapAirQuality(airQualityData);
+
+    setWeather(currentWeather);
+    setForecast(currentForecast);
+    setHourlyWeather(currentHourly);
+    setAirQuality(currentAirQuality);
+
+  } catch (error) {
+    console.error(
+      "Location weather failed:",
+      error
+    );
+
+    setError(
+      "Couldn't access your current location."
+    );
+
+  } finally {
+    setIsLoading(false);
+  }
+};
+
   return (
     <div
       className="flex min-h-screen transition-colors duration-500"
@@ -162,11 +236,35 @@ const [hourlyWeather, setHourlyWeather] =
       <main className="flex-1 p-8">
 
         <Header
-          theme={theme}
-          onCitySelect={handleCitySelect}
-        />
+  theme={theme}
+  onCitySelect={handleCitySelect}
+  onCurrentLocation={
+    handleCurrentLocation
+  }
+/>
+        {isLoading && (
+  <div
+    className="mt-6 rounded-2xl p-4 text-center text-sm"
+    style={{
+      backgroundColor: theme.card,
+      color: theme.text,
+    }}
+  >
+    🌤️ Loading weather data...
+  </div>
+)}
 
-
+{error && (
+  <div
+    className="mt-6 rounded-2xl p-4 text-center text-sm"
+    style={{
+      backgroundColor: theme.card,
+      color: theme.text,
+    }}
+  >
+    ⚠️ {error}
+  </div>
+)}
         <div className="mt-8">
 
           <CurrentWeather
