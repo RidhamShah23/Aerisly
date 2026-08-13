@@ -1,21 +1,82 @@
-import { MagnifyingGlass, Bell, MapPin } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import type { ChangeEvent } from "react";import {
+  MagnifyingGlass,
+  Bell,
+  MapPin,
+} from "@phosphor-icons/react";
+
 import type { WeatherTheme } from "../types/weather";
+import type { LocationResult } from "../services/geocodingApi";
+import { searchCity } from "../services/geocodingApi";
 
 interface HeaderProps {
   theme: WeatherTheme;
+  onCitySelect: (location: LocationResult) => void;
 }
 
-function Header({ theme }: HeaderProps) {
-    return (
-    <header style={{
-  backgroundColor: theme.card,
-  color: theme.text,
-}} className="flex items-center justify-between gap-6">
+function Header({
+  theme,
+  onCitySelect,
+}: HeaderProps) {
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState<LocationResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+ useEffect(() => {
+  if (!search.trim()) {
+    return;
+  }
+
+  const timer = setTimeout(async () => {
+    try {
+      setIsSearching(true);
+
+      const locations = await searchCity(search);
+
+      setResults(locations);
+    } catch (error) {
+      console.error("City search failed:", error);
+      setResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, 400);
+
+  return () => clearTimeout(timer);
+}, [search]);
+
+  const handleCitySelect = (location: LocationResult) => {
+    setSearch(location.name);
+    setResults([]);
+    onCitySelect(location);
+  };
+  const handleSearchChange = (
+  event: ChangeEvent<HTMLInputElement>
+) => {
+  const value = event.target.value;
+
+  setSearch(value);
+
+  if (!value.trim()) {
+    setResults([]);
+  }
+};
+
+  return (
+    <header className="flex items-center justify-between gap-6">
       {/* Greeting */}
       <div>
-        <p className="text-sm text-gray-500">Good evening</p>
+        <p
+          className="text-sm"
+          style={{ color: theme.mutedText }}
+        >
+          Good evening
+        </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800">
+        <h2
+          className="text-2xl font-semibold"
+          style={{ color: theme.text }}
+        >
           Weather Overview
         </h2>
       </div>
@@ -23,27 +84,111 @@ function Header({ theme }: HeaderProps) {
       {/* Right Section */}
       <div className="flex items-center gap-4">
         {/* Search */}
-        <div className="flex items-center gap-2 w-72 px-4 py-3 bg-white rounded-xl border border-gray-100">
-          <MagnifyingGlass
-            size={20}
-            className="text-gray-400"
-          />
+        <div className="relative">
+          <div
+            className="flex w-72 items-center gap-2 rounded-xl border px-4 py-3"
+            style={{
+              backgroundColor: theme.card,
+              borderColor: theme.mutedText,
+            }}
+          >
+            <MagnifyingGlass
+              size={20}
+              style={{ color: theme.mutedText }}
+            />
 
-          <input
-            type="text"
-            placeholder="Search city..."
-            className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
-          />
+            <input
+              type="text"
+              value={search}
+              onChange={handleSearchChange}
+              placeholder="Search city..."
+              className="w-full bg-transparent text-sm outline-none"
+              style={{
+                color: theme.text,
+              }}
+            />
+
+            {isSearching && (
+              <span
+                className="text-xs"
+                style={{ color: theme.mutedText }}
+              >
+                ...
+              </span>
+            )}
+          </div>
+
+          {/* Search Results */}
+          {results.length > 0 && (
+            <div
+              className="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border shadow-lg"
+              style={{
+                backgroundColor: theme.card,
+                borderColor: theme.mutedText,
+              }}
+            >
+              {results.map((location) => (
+                <button
+                  key={`${location.latitude}-${location.longitude}`}
+                  onClick={() =>
+                    handleCitySelect(location)
+                  }
+                  className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-black/5"
+                >
+                  <MapPin
+                    size={18}
+                    style={{ color: theme.primary }}
+                  />
+
+                  <div>
+                    <p
+                      className="text-sm font-medium"
+                      style={{ color: theme.text }}
+                    >
+                      {location.name}
+                    </p>
+
+                    <p
+                      className="text-xs"
+                      style={{ color: theme.mutedText }}
+                    >
+                      {location.admin1
+                        ? `${location.admin1}, `
+                        : ""}
+                      {location.country}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Location */}
-        <button className="flex items-center gap-2 px-4 py-3 bg-white rounded-xl border border-gray-100 text-gray-600">
+        {/* Current Location */}
+        <button
+          className="flex items-center gap-2 rounded-xl border px-4 py-3"
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.mutedText,
+            color: theme.text,
+          }}
+        >
           <MapPin size={20} />
-          <span className="text-sm">Ahmedabad</span>
+
+          <span className="text-sm">
+            Ahmedabad
+          </span>
         </button>
 
         {/* Notification */}
-        <button className="p-3 bg-white rounded-xl border border-gray-100 text-gray-600">
+        <button
+          className="rounded-xl border p-3"
+          style={{
+            backgroundColor: theme.card,
+            borderColor: theme.mutedText,
+            color: theme.text,
+          }}
+        >
           <Bell size={21} />
         </button>
       </div>

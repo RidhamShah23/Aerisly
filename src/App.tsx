@@ -31,6 +31,9 @@ import type {
   AirQuality as AirQualityType,
 } from "./types/weather";
 
+import { searchCity } from "./services/geocodingApi";
+import type { LocationResult } from "./services/geocodingApi";
+
 const weather: CurrentWeatherType = {
   city: "Ahmedabad",
   temperature: 32,
@@ -133,6 +136,12 @@ const activities: Activity[] = [
   },
 ];
 
+const testSearch = async () => {
+  const results = await searchCity("Ahmedabad");
+
+  console.log(results);
+};
+
 function App() {
   const [condition, setCondition] = useState<WeatherCondition>("sunny");
   const theme = weatherThemes[condition];
@@ -142,6 +151,20 @@ function App() {
   rainProbability: 10,
   windSpeed: weather.windSpeed,
   uvIndex: weather.uvIndex,
+  
+};
+const handleCitySelect = (location: LocationResult) => {
+  console.log("Selected city:", location);
+
+  console.log(
+    "Latitude:",
+    location.latitude
+  );
+
+  console.log(
+    "Longitude:",
+    location.longitude
+  );
 };
 
 const scoredActivities = activities.map((activity) => ({
@@ -162,7 +185,10 @@ const scoredActivities = activities.map((activity) => ({
       <Sidebar theme={theme}/>
 
 <main className="flex-1 p-8">
-          <Header theme={theme}/>
+          <Header
+  theme={theme}
+  onCitySelect={handleCitySelect}
+/>
         <div className="mt-8">
           <CurrentWeather weather={weather} theme={theme} />
           <div className="mt-6 grid grid-cols-3 gap-5">
@@ -238,6 +264,12 @@ const scoredActivities = activities.map((activity) => ({
     Test Rainy Theme
   </button>
 </div>
+<button
+  onClick={testSearch}
+  className="mt-4 rounded-xl bg-green-600 px-5 py-3 text-white"
+>
+  Test City Search
+</button>
       </main>
     </div>
   );
