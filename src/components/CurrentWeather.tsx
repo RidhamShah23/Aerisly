@@ -41,8 +41,14 @@ function CurrentWeather({
           </p>
 
           <p className="mt-2 text-lg text-gray-500">
-            {weather.condition}
-          </p>
+  {weather.condition === "sunny"
+    ? "Clear Sky"
+    : weather.condition === "rainy"
+      ? "Rainy"
+      : weather.condition === "cloudy"
+        ? "Cloudy"
+        : weather.condition}
+</p>
         </div>
 
         <Sun

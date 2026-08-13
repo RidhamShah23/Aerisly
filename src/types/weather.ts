@@ -19,7 +19,7 @@ export type WeatherCondition =
 export interface CurrentWeather {
   city: string;
   temperature: number;
-  condition: string;
+  condition: WeatherCondition;
   feelsLike: number;
   humidity: number;
   windSpeed: number;

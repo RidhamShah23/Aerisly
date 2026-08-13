@@ -6,7 +6,6 @@ import { weatherThemes } from "./themes/weatherThemes";
 
 import type {
   CurrentWeather as CurrentWeatherType,
-  WeatherCondition,
   ForecastDay,
   Activity,
 } from "./types/weather";
@@ -31,18 +30,12 @@ import type {
   AirQuality as AirQualityType,
 } from "./types/weather";
 
-import { searchCity } from "./services/geocodingApi";
 import type { LocationResult } from "./services/geocodingApi";
+import { getWeather } from "./services/weatherApi";
+import {
+  mapCurrentWeather,
+} from "./utils/weatherUtils";
 
-const weather: CurrentWeatherType = {
-  city: "Ahmedabad",
-  temperature: 32,
-  condition: "Clear Sky",
-  feelsLike: 35,
-  humidity: 55,
-  windSpeed: 12,
-  uvIndex: 6,
-};
 
 const airQuality: AirQualityType = {
   aqi: 42,
@@ -136,15 +129,20 @@ const activities: Activity[] = [
   },
 ];
 
-const testSearch = async () => {
-  const results = await searchCity("Ahmedabad");
-
-  console.log(results);
-};
-
 function App() {
-  const [condition, setCondition] = useState<WeatherCondition>("sunny");
-  const theme = weatherThemes[condition];
+  const [weather,setweather]=
+useState<CurrentWeatherType>({
+  city: "Ahmedabad",
+  temperature: 32,
+  condition: "sunny",
+  feelsLike: 35,
+  humidity: 55,
+  windSpeed: 12,
+  uvIndex: 6,
+});
+
+
+const theme = weatherThemes[weather.condition];
   const activityWeather = {
   temperature: weather.temperature,
   humidity: weather.humidity,
@@ -153,18 +151,29 @@ function App() {
   uvIndex: weather.uvIndex,
   
 };
-const handleCitySelect = (location: LocationResult) => {
-  console.log("Selected city:", location);
+const handleCitySelect = async (
+  location: LocationResult
+) => {
+  try {
+    const data = await getWeather(
+      location.latitude,
+      location.longitude
+    );
 
-  console.log(
-    "Latitude:",
-    location.latitude
-  );
+    const currentWeather = mapCurrentWeather(
+      data,
+      location.name
+    );
 
-  console.log(
-    "Longitude:",
-    location.longitude
-  );
+    setweather(currentWeather);
+
+    console.log("Updated weather:", currentWeather);
+  } catch (error) {
+    console.error(
+      "Weather fetch failed:",
+      error
+    );
+  }
 };
 
 const scoredActivities = activities.map((activity) => ({
@@ -175,104 +184,138 @@ const scoredActivities = activities.map((activity) => ({
   ),
 }));
   return (
-   <div
-  className="flex min-h-screen transition-colors duration-500"
-  style={{
-    backgroundColor: theme.background,
-    color: theme.text,
-  }}
->
-      <Sidebar theme={theme}/>
+    <div
+      className="flex min-h-screen transition-colors duration-500"
+      style={{
+        backgroundColor: theme.background,
+        color: theme.text,
+      }}
+    >
 
-<main className="flex-1 p-8">
-          <Header
-  theme={theme}
-  onCitySelect={handleCitySelect}
-/>
+      <Sidebar theme={theme} />
+
+
+      <main className="flex-1 p-8">
+
+        <Header
+          theme={theme}
+          onCitySelect={handleCitySelect}
+        />
+
+
         <div className="mt-8">
-          <CurrentWeather weather={weather} theme={theme} />
+
+          <CurrentWeather
+            weather={weather}
+            theme={theme}
+          />
+
+
+          {/* Weather Stats */}
+
           <div className="mt-6 grid grid-cols-3 gap-5">
-  <WeatherStatCard
-    icon={Drop}
-    label="Humidity"
-    value={`${weather.humidity}%`}
-    description="Normal"
-    theme={theme}
-  />
 
-  <WeatherStatCard
-    icon={Wind}
-    label="Wind Speed"
-    value={`${weather.windSpeed} km/h`}
-    description="Moderate"
-    theme={theme}
-  />
+            <WeatherStatCard
+              icon={Drop}
+              label="Humidity"
+              value={`${weather.humidity}%`}
+              description="Normal"
+              theme={theme}
+            />
 
-  <WeatherStatCard
-    icon={Sun}
-    label="UV Index"
-    value={String(weather.uvIndex)}
-    description="High"
-    theme={theme}
-  />
-</div>
-<div className="mt-8">
-  <h3
-    className="mb-4 text-xl font-semibold"
-    style={{ color: theme.text }}
-  >
-    5-Day Forecast
-  </h3>
+            <WeatherStatCard
+              icon={Wind}
+              label="Wind Speed"
+              value={`${weather.windSpeed} km/h`}
+              description="Moderate"
+              theme={theme}
+            />
 
-  <div className="grid grid-cols-5 gap-4">
-    {forecast.map((day) => (
-      <ForecastCard
-        key={day.day}
-        forecast={day}
-        theme={theme}
-      />
-    ))}
-  </div>
-  <div className="mt-8">
-  <TemperatureChart theme={theme} />
-</div>
-<div className="mt-8">
-  <RainTimeline
-    forecast={rainForecast}
-    theme={theme}
-  />
-</div>
-<div className="mt-8">
-  <ActivityRecommendation
-    activities={scoredActivities}
-    theme={theme}
-  />
-</div>
-<div className="mt-8">
-  <AirQuality
-    airQuality={airQuality}
-    theme={theme}
-  />
-</div>
-</div>
+            <WeatherStatCard
+              icon={Sun}
+              label="UV Index"
+              value={String(weather.uvIndex)}
+              description="High"
+              theme={theme}
+            />
+
+          </div>
+
+
+          {/* 5-Day Forecast */}
+
+          <div className="mt-8">
+
+            <h3
+              className="mb-4 text-xl font-semibold"
+              style={{
+                color: theme.text,
+              }}
+            >
+              5-Day Forecast
+            </h3>
+
+
+            <div className="grid grid-cols-5 gap-4">
+
+              {forecast.map((day) => (
+                <ForecastCard
+                  key={day.day}
+                  forecast={day}
+                  theme={theme}
+                />
+              ))}
+
+            </div>
+
+          </div>
+
+
+          {/* Temperature Chart */}
+
+          <div className="mt-8">
+            <TemperatureChart
+              theme={theme}
+            />
+          </div>
+
+
+          {/* Rain Timeline */}
+
+          <div className="mt-8">
+            <RainTimeline
+              forecast={rainForecast}
+              theme={theme}
+            />
+          </div>
+
+
+          {/* Activity Recommendation */}
+
+          <div className="mt-8">
+            <ActivityRecommendation
+              activities={scoredActivities}
+              theme={theme}
+            />
+          </div>
+
+
+          {/* Air Quality */}
+
+          <div className="mt-8">
+            <AirQuality
+              airQuality={airQuality}
+              theme={theme}
+            />
+          </div>
+
         </div>
-        <div className="mt-6">
-  <button
-    onClick={() => setCondition("rainy")}
-    className="rounded-xl bg-blue-500 px-5 py-3 text-white"
-  >
-    Test Rainy Theme
-  </button>
-</div>
-<button
-  onClick={testSearch}
-  className="mt-4 rounded-xl bg-green-600 px-5 py-3 text-white"
->
-  Test City Search
-</button>
+
       </main>
+
     </div>
   );
 }
+
 
 export default App;
