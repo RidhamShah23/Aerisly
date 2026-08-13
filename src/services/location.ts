@@ -35,3 +35,64 @@ export function getCurrentLocation(): Promise<Coordinates> {
     );
   });
 }
+export interface ReverseGeocodingResult {
+  city: string;
+  state?: string;
+  country?: string;
+}
+
+interface ReverseGeocodingResponse {
+  address?: {
+    city?: string;
+    town?: string;
+    village?: string;
+    municipality?: string;
+    state?: string;
+    country?: string;
+  };
+}
+
+export async function getCityFromCoordinates(
+  latitude: number,
+  longitude: number
+): Promise<ReverseGeocodingResult> {
+  const params = new URLSearchParams({
+    lat: String(latitude),
+    lon: String(longitude),
+    format: "json",
+    zoom: "10",
+  });
+
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/reverse?${params}`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to find city from coordinates"
+    );
+  }
+
+  const data: ReverseGeocodingResponse =
+    await response.json();
+
+  const address = data.address;
+
+  const city =
+    address?.city ??
+    address?.town ??
+    address?.village ??
+    address?.municipality;
+
+  if (!city) {
+    throw new Error(
+      "Could not determine city from coordinates"
+    );
+  }
+
+  return {
+    city,
+    state: address?.state,
+    country: address?.country,
+  };
+}

@@ -1,7 +1,7 @@
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import CurrentWeather from "./components/CurrentWeather";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { weatherThemes } from "./themes/weatherThemes";
 
 import type {
@@ -41,6 +41,7 @@ import {
 import { getAirQuality } from "./services/airQualityApi";
 import {
   getCurrentLocation,
+  getCityFromCoordinates,
 } from "./services/location";
 
 const activities: Activity[] = [
@@ -98,57 +99,14 @@ const theme = weatherThemes[weather.condition];
 const handleCitySelect = async (
   location: LocationResult
 ) => {
-  try {
-    setIsLoading(true);
-    setError(null);
-
-    const [weatherData, airQualityData] =
-      await Promise.all([
-        getWeather(
-          location.latitude,
-          location.longitude
-        ),
-
-        getAirQuality(
-          location.latitude,
-          location.longitude
-        ),
-      ]);
-
-    const currentWeather =
-      mapCurrentWeather(
-        weatherData,
-        location.name
-      );
-
-    const currentForecast =
-      mapForecast(weatherData);
-
-    const currentHourly =
-      mapHourlyWeather(weatherData);
-
-    const currentAirQuality =
-      mapAirQuality(airQualityData);
-
-    setWeather(currentWeather);
-    setForecast(currentForecast);
-    setHourlyWeather(currentHourly);
-    setAirQuality(currentAirQuality);
-
-  } catch (error) {
-    console.error(
-      "Weather fetch failed:",
-      error
-    );
-
-    setError(
-      "Couldn't load weather data. Please try again."
-    );
-
-  } finally {
-    setIsLoading(false);
-  }
+  await loadWeatherForLocation(
+    location.latitude,
+    location.longitude,
+    location.name
+  );
 };
+
+
 
 const scoredActivities = activities.map((activity) => ({
   ...activity,
@@ -173,23 +131,50 @@ const handleCurrentLocation = async () => {
     const coordinates =
       await getCurrentLocation();
 
+    const location =
+      await getCityFromCoordinates(
+        coordinates.latitude,
+        coordinates.longitude
+      );
+
+    await loadWeatherForLocation(
+      coordinates.latitude,
+      coordinates.longitude,
+      location.city
+    );
+
+  } catch (error) {
+    console.error(
+      "Location weather failed:",
+      error
+    );
+
+    setError(
+      "Couldn't determine your current location."
+    );
+
+    setIsLoading(false);
+  }
+};
+const loadWeatherForLocation = async (
+  latitude: number,
+  longitude: number,
+  city: string
+) => {
+  try {
+    setIsLoading(true);
+    setError(null);
+
     const [weatherData, airQualityData] =
       await Promise.all([
-        getWeather(
-          coordinates.latitude,
-          coordinates.longitude
-        ),
-
-        getAirQuality(
-          coordinates.latitude,
-          coordinates.longitude
-        ),
+        getWeather(latitude, longitude),
+        getAirQuality(latitude, longitude),
       ]);
 
     const currentWeather =
       mapCurrentWeather(
         weatherData,
-        "Current Location"
+        city
       );
 
     const currentForecast =
@@ -208,18 +193,25 @@ const handleCurrentLocation = async () => {
 
   } catch (error) {
     console.error(
-      "Location weather failed:",
+      "Weather loading failed:",
       error
     );
 
     setError(
-      "Couldn't access your current location."
+      "Couldn't load weather data. Please try again."
     );
 
   } finally {
     setIsLoading(false);
   }
 };
+ useEffect(() => {
+    loadWeatherForLocation(
+      23.0225,
+      72.5714,
+      "Ahmedabad"
+    );
+  }, []);
 
   return (
     <div
