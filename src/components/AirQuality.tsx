@@ -5,11 +5,57 @@ import type {
   WeatherTheme,
 } from "../types/weather";
 
-import { getAQIStatus } from "../utils/airQualityUtils";
-
 interface AirQualityProps {
   airQuality: AirQualityType;
   theme: WeatherTheme;
+}
+
+function getAQIStatus(aqi: number) {
+  if (aqi <= 50) {
+    return {
+      label: "Good",
+      description:
+        "Air quality is good and suitable for most people.",
+    };
+  }
+
+  if (aqi <= 100) {
+    return {
+      label: "Satisfactory",
+      description:
+        "Air quality is acceptable, but some sensitive people may experience minor discomfort.",
+    };
+  }
+
+  if (aqi <= 200) {
+    return {
+      label: "Moderately Polluted",
+      description:
+        "Sensitive people may experience health effects with prolonged exposure.",
+    };
+  }
+
+  if (aqi <= 300) {
+    return {
+      label: "Poor",
+      description:
+        "Prolonged exposure may cause discomfort and health effects.",
+    };
+  }
+
+  if (aqi <= 400) {
+    return {
+      label: "Very Poor",
+      description:
+        "Health effects are possible with prolonged exposure.",
+    };
+  }
+
+  return {
+    label: "Severe",
+    description:
+      "Health alert: everyone may experience more serious health effects.",
+  };
 }
 
 function AirQuality({
@@ -53,43 +99,67 @@ function AirQuality({
       </div>
 
       {/* AQI */}
-      <div className="mt-6 flex items-center gap-5">
-        <div>
-          <p className="text-5xl font-bold">
-            {airQuality.aqi}
-          </p>
+      <div className="flex items-center justify-between">
 
-          <p
-            className="mt-1 text-sm"
-            style={{ color: theme.primary }}
-          >
-            {status}
-          </p>
-        </div>
+  <div>
+    <p
+      className="text-5xl font-semibold"
+      style={{
+        color: theme.text,
+      }}
+    >
+      {airQuality.aqi}
+    </p>
 
-        <div className="flex-1">
-          <div className="h-3 overflow-hidden rounded-full bg-gray-200">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{
-                width: `${Math.min(
-                  airQuality.aqi / 3,
-                  100
-                )}%`,
-                backgroundColor: theme.primary,
-              }}
-            />
-          </div>
+    <p
+  className="mt-1 text-sm font-medium"
+  style={{
+    color: theme.primary,
+  }}
+>
+  Indian AQI
+</p>
+  </div>
 
-          <p
-            className="mt-2 text-xs"
-            style={{ color: theme.mutedText }}
-          >
-            Lower is better
-          </p>
-        </div>
-      </div>
+  <div className="text-right">
+    <p className="text-lg font-semibold">
+      {status.label}
+    </p>
 
+    <p
+      className="mt-1 max-w-xs text-sm"
+      style={{
+        color: theme.mutedText,
+      }}
+    >
+      {status.description}
+    </p>
+    <div className="mt-5">
+
+  <div
+    className="h-2 overflow-hidden rounded-full"
+    style={{
+      backgroundColor:
+        `${theme.primary}20`,
+    }}
+  >
+    <div
+      className="h-full rounded-full transition-all duration-700"
+      style={{
+       width: `${Math.min(
+  (airQuality.aqi / 500) * 100,
+  100
+)}%`,
+        backgroundColor:
+          theme.primary,
+      }}
+    />
+  </div>
+
+</div>
+  </div>
+
+</div>
       {/* Pollutants */}
       <div className="mt-6 grid grid-cols-4 gap-3">
         <Pollutant
@@ -145,9 +215,9 @@ function Pollutant({
         {label}
       </p>
 
-      <p className="mt-1 font-semibold">
-        {value}
-      </p>
+     <p className="mt-1 font-semibold">
+  {value} μg/m³
+</p>
     </div>
   );
 }

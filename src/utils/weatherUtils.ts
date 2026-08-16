@@ -6,11 +6,11 @@ import type {
 } from "../types/weather";
 
 import type { WeatherApiResponse } from "../services/weatherApi";
-import type { AirQuality } from "../types/weather";
-
 import type {
   AirQualityApiResponse,
 } from "../services/airQualityApi";
+
+import {calculateIndianAQI} from "./airQualityUtils";
 
 export type RainLevel =
   | "Low"
@@ -179,26 +179,38 @@ function formatHour(time: string): string {
 
 export function mapAirQuality(
   data: AirQualityApiResponse
-): AirQuality {
+) {
+  const aqi =
+    calculateIndianAQI({
+      pm10: data.hourly.pm10,
+      pm25: data.hourly.pm2_5,
+      nitrogenDioxide:
+        data.hourly.nitrogen_dioxide,
+      ozone: data.hourly.ozone,
+    });
+
+  const latestIndex =
+    data.hourly.pm2_5.length - 1;
+
   return {
-    aqi: Math.round(
-      data.current.us_aqi
-    ),
+    aqi,
 
     pm25: Math.round(
-      data.current.pm2_5
+      data.hourly.pm2_5[latestIndex] ?? 0
     ),
 
     pm10: Math.round(
-      data.current.pm10
+      data.hourly.pm10[latestIndex] ?? 0
     ),
 
     ozone: Math.round(
-      data.current.ozone
+      data.hourly.ozone[latestIndex] ?? 0
     ),
 
     nitrogenDioxide: Math.round(
-      data.current.nitrogen_dioxide
+      data.hourly.nitrogen_dioxide[
+        latestIndex
+      ] ?? 0
     ),
   };
 }

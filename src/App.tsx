@@ -45,6 +45,9 @@ import {
 } from "./services/location";
 import SmartWeatherInsights from "./components/SmartWeatherInsights";
 
+
+
+
 const activities: Activity[] = [
   {
     name: "Running",
@@ -115,7 +118,6 @@ const handleCitySelect = async (
     location.name
   );
 };
-
 
 
 const scoredActivities = activities.map((activity) => ({

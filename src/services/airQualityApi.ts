@@ -1,10 +1,10 @@
 export interface AirQualityApiResponse {
-  current: {
-    us_aqi: number;
-    pm2_5: number;
-    pm10: number;
-    ozone: number;
-    nitrogen_dioxide: number;
+  hourly: {
+    time: string[];
+    pm10: number[];
+    pm2_5: number[];
+    nitrogen_dioxide: number[];
+    ozone: number[];
   };
 }
 
@@ -12,14 +12,19 @@ export async function getAirQuality(
   latitude: number,
   longitude: number
 ): Promise<AirQualityApiResponse> {
+
   const params = new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
 
-    current:
-      "us_aqi,pm2_5,pm10,ozone,nitrogen_dioxide",
+    hourly:
+      "pm10,pm2_5,nitrogen_dioxide,ozone",
 
     timezone: "auto",
+
+    past_hours: "24",
+
+    forecast_hours: "1",
   });
 
   const response = await fetch(
