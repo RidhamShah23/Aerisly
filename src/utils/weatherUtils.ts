@@ -202,3 +202,109 @@ export function mapAirQuality(
     ),
   };
 }
+import type {
+  WeatherInsight,
+} from "../types/weather";
+
+interface InsightWeatherData {
+  temperature: number;
+  feelsLike: number;
+  humidity: number;
+  windSpeed: number;
+  uvIndex: number;
+  rainProbability: number;
+  condition: string;
+}
+
+export function generateWeatherInsights(
+  weather: InsightWeatherData
+): WeatherInsight[] {
+  const insights: WeatherInsight[] = [];
+
+  // 🌧️ Rain
+  if (weather.rainProbability >= 60) {
+    insights.push({
+      type: "rain",
+      title: "Rain expected",
+      message: `Rain probability reaches ${weather.rainProbability}% soon. Carry an umbrella.`,
+    });
+  }
+
+  // 🌡️ Heat
+  if (weather.temperature >= 35) {
+    insights.push({
+      type: "heat",
+      title: "High temperature",
+      message: `Temperature may reach ${weather.temperature}°C. Stay hydrated and avoid prolonged heat.`,
+    });
+  }
+
+  // 🥵 Feels-like
+  if (
+    weather.feelsLike - weather.temperature >= 4
+  ) {
+    insights.push({
+      type: "heat",
+      title: "Feels warmer",
+      message: `It feels like ${weather.feelsLike}°C, which is ${weather.feelsLike - weather.temperature}° warmer than the actual temperature.`,
+    });
+  }
+
+  // 💧 Humidity
+  if (weather.humidity >= 80) {
+    insights.push({
+      type: "humidity",
+      title: "High humidity",
+      message: `Humidity is currently ${weather.humidity}%. The air may feel uncomfortable.`,
+    });
+  } else if (weather.humidity <= 30) {
+    insights.push({
+      type: "humidity",
+      title: "Dry conditions",
+      message: `Humidity is only ${weather.humidity}%. Stay hydrated, especially outdoors.`,
+    });
+  }
+
+  // 💨 Wind
+  if (weather.windSpeed >= 30) {
+    insights.push({
+      type: "wind",
+      title: "Strong winds",
+      message: `Wind speeds are around ${weather.windSpeed} km/h. Take extra care outdoors.`,
+    });
+  }
+
+  // ☀️ UV
+  if (weather.uvIndex >= 7) {
+    insights.push({
+      type: "uv",
+      title: "High UV exposure",
+      message: `UV Index is ${weather.uvIndex}. Consider limiting direct sun exposure around midday.`,
+    });
+  }
+
+  // ☁️ Cloudy
+  if (
+    weather.condition === "cloudy" &&
+    weather.rainProbability < 40
+  ) {
+    insights.push({
+      type: "cloudy",
+      title: "Mostly cloudy",
+      message:
+        "Cloud cover is expected without significant rain.",
+    });
+  }
+
+  // ☀️ Comfortable fallback
+  if (insights.length === 0) {
+    insights.push({
+      type: "comfortable",
+      title: "Great weather today",
+      message:
+        "Conditions look comfortable with no major weather concerns.",
+    });
+  }
+
+  return insights.slice(0, 3);
+}

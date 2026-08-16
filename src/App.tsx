@@ -43,6 +43,7 @@ import {
   getCurrentLocation,
   getCityFromCoordinates,
 } from "./services/location";
+import SmartWeatherInsights from "./components/SmartWeatherInsights";
 
 const activities: Activity[] = [
   {
@@ -88,10 +89,19 @@ const [forecast, setForecast] =
 
 
 const theme = weatherThemes[weather.condition];
-  const activityWeather = {
+const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>([]);
+
+const activityWeather = {
   temperature: weather.temperature,
   humidity: weather.humidity,
-  rainProbability: 10,
+  rainProbability:
+    hourlyWeather.length > 0
+      ? Math.max(
+          ...hourlyWeather.map(
+            (hour) => hour.rainProbability
+          )
+        )
+      : 0,
   windSpeed: weather.windSpeed,
   uvIndex: weather.uvIndex,
   
@@ -115,8 +125,7 @@ const scoredActivities = activities.map((activity) => ({
     activityWeather
   ),
 }));
-const [hourlyWeather, setHourlyWeather] =
-  useState<HourlyWeather[]>([]);
+
 
   const [airQuality, setAirQuality] =
   useState<AirQualityType | null>(null);
@@ -335,12 +344,20 @@ const loadWeatherForLocation = async (
 
           {/* Activity Recommendation */}
 
-          <div className="mt-8">
-            <ActivityRecommendation
-              activities={scoredActivities}
-              theme={theme}
-            />
-          </div>
+          <div className="mt-8 grid grid-cols-2 gap-6">
+
+  <ActivityRecommendation
+    activities={scoredActivities}
+    theme={theme}
+  />
+
+  <SmartWeatherInsights
+    weather={weather}
+    hourlyWeather={hourlyWeather}
+    theme={theme}
+  />
+
+</div>
 
 
           {/* Air Quality */}

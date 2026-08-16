@@ -95,7 +95,7 @@ function ActivityRecommendation({
                   className="text-xs"
                   style={{ color: theme.mutedText }}
                 >
-                  / 100
+                  
                 </p>
               </div>
             </div>

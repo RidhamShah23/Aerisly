@@ -57,3 +57,18 @@ export interface HourlyWeather {
   temperature: number;
   rainProbability: number;
 }
+
+export type InsightType =
+  | "rain"
+  | "heat"
+  | "humidity"
+  | "wind"
+  | "uv"
+  | "comfortable"
+  | "cloudy";
+
+export interface WeatherInsight {
+  type: InsightType;
+  title: string;
+  message: string;
+}
