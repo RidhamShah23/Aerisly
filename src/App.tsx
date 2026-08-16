@@ -44,7 +44,7 @@ import {
   getCityFromCoordinates,
 } from "./services/location";
 import SmartWeatherInsights from "./components/SmartWeatherInsights";
-
+import WeatherSkeleton from "./components/WeatherSkeleton";
 
 
 
@@ -224,6 +224,14 @@ const loadWeatherForLocation = async (
     );
   }, []);
 
+  function getUVLevel(uvIndex: number) {
+  if (uvIndex <= 2) return "Low";
+  if (uvIndex <= 5) return "Moderate";
+  if (uvIndex <= 7) return "High";
+  if (uvIndex <= 10) return "Very High";
+
+  return "Extreme";
+}
   return (
     <div
       className="flex min-h-screen transition-colors duration-500"
@@ -236,7 +244,7 @@ const loadWeatherForLocation = async (
       <Sidebar theme={theme} />
 
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-8">
 
         <Header
   theme={theme}
@@ -245,17 +253,10 @@ const loadWeatherForLocation = async (
     handleCurrentLocation
   }
 />
-        {isLoading && (
-  <div
-    className="mt-6 rounded-2xl p-4 text-center text-sm"
-    style={{
-      backgroundColor: theme.card,
-      color: theme.text,
-    }}
-  >
-    🌤️ Loading weather data...
-  </div>
-)}
+{isLoading ? (
+  <WeatherSkeleton theme={theme} />
+) : (
+  <div className="mt-8">
 
 {error && (
   <div
@@ -278,7 +279,7 @@ const loadWeatherForLocation = async (
 
           {/* Weather Stats */}
 
-          <div className="mt-6 grid grid-cols-3 gap-5">
+        <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
 
             <WeatherStatCard
               icon={Drop}
@@ -296,11 +297,11 @@ const loadWeatherForLocation = async (
               theme={theme}
             />
 
-            <WeatherStatCard
+           <WeatherStatCard
               icon={Sun}
               label="UV Index"
               value={String(weather.uvIndex)}
-              description="High"
+              description={getUVLevel(weather.uvIndex)}
               theme={theme}
             />
 
@@ -321,7 +322,7 @@ const loadWeatherForLocation = async (
             </h3>
 
 
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
 
               {forecast.map((day) => (
                 <ForecastCard
@@ -346,8 +347,7 @@ const loadWeatherForLocation = async (
 
           {/* Activity Recommendation */}
 
-          <div className="mt-8 grid grid-cols-2 gap-6">
-
+<div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.25fr]">
   <ActivityRecommendation
     activities={scoredActivities}
     theme={theme}
@@ -375,11 +375,16 @@ const loadWeatherForLocation = async (
 
         </div>
 
+  </div>
+)}
+
       </main>
+      
 
     </div>
   );
 }
+
 
 
 export default App;

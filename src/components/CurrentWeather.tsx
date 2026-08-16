@@ -62,7 +62,8 @@ function CurrentWeather({
               color: theme.mutedText,
             }}
           >
-            {weather.condition}
+           {weather.condition.charAt(0).toUpperCase() +
+            weather.condition.slice(1)}
           </p>
 
           <p

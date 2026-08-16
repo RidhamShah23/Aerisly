@@ -192,39 +192,6 @@ function TemperatureChart({
   };
 }, [hourlyWeather]);
 
-  useEffect(() => {
-    const timer =
-      window.setTimeout(() => {
-        positionRainIcons();
-      }, 0);
-
-    const container =
-      containerRef.current;
-
-    if (!container) {
-      return () => {
-        window.clearTimeout(timer);
-      };
-    }
-
-    const resizeObserver =
-      new ResizeObserver(() => {
-        positionRainIcons();
-      });
-
-    resizeObserver.observe(
-      container
-    );
-
-    return () => {
-      window.clearTimeout(timer);
-      resizeObserver.disconnect();
-    };
-  }, [
-    hourlyWeather,
-    theme.primary,
-  ]);
-
   const options = {
     responsive: true,
 
@@ -369,6 +336,3 @@ function TemperatureChart({
 
 export default TemperatureChart;
 
-function positionRainIcons() {
-  throw new Error("Function not implemented.");
-}

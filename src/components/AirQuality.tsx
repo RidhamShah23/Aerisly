@@ -161,7 +161,7 @@ function AirQuality({
 
 </div>
       {/* Pollutants */}
-      <div className="mt-6 grid grid-cols-4 gap-3">
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Pollutant
           label="PM2.5"
           value={airQuality.pm25}
