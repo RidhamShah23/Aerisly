@@ -44,7 +44,16 @@ function Sidebar({ theme }: SidebarProps) {
   backgroundColor: theme.card,
   color: theme.text,
   borderColor: theme.mutedText,
-}}  className="w-64 min-h-screen border-r border-gray-100 p-6">
+}}  className="
+  hidden
+  md:block
+  md:w-64
+  min-h-screen
+  border-r
+  border-gray-100
+  p-6
+  shrink-0
+">
       <h1 className="text-2xl font-bold text-green-600 mb-10">
         Weatherly
       </h1>
