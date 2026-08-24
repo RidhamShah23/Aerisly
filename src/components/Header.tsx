@@ -50,7 +50,7 @@ function Header({
 }, [search]);
 
   const handleCitySelect = (location: LocationResult) => {
-    setSearch(location.name);
+    setSearch("");
     setResults([]);
     onCitySelect(location);
   };
@@ -67,7 +67,7 @@ function Header({
 };
 
   return (
-    <header className="flex items-center justify-between gap-6">
+    <header className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
       {/* Greeting */}
       <div>
         <p
@@ -85,117 +85,146 @@ function Header({
         </h2>
       </div>
 
-      {/* Right Section */}
-      <div className="flex items-center gap-4">
-        {/* Search */}
-        <div className="relative">
-          <div
-            className="flex w-72 items-center gap-2 rounded-xl border px-4 py-3"
-            style={{
-              backgroundColor: theme.card,
-              borderColor: theme.mutedText,
-            }}
-          >
-            <MagnifyingGlass
-              size={20}
-              style={{ color: theme.mutedText }}
-            />
+     {/* Right Section */}
 
-            <input
-              type="text"
-              value={search}
-              onChange={handleSearchChange}
-              placeholder="Search city..."
-              className="w-full bg-transparent text-sm outline-none"
-              style={{
-                color: theme.text,
-              }}
-            />
+<div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center md:gap-4">
 
-            {isSearching && (
-              <span
-                className="text-xs"
-                style={{ color: theme.mutedText }}
-              >
-                ...
-              </span>
-            )}
-          </div>
+  {/* Search */}
 
-          {/* Search Results */}
-          {results.length > 0 && (
-            <div
-              className="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border shadow-lg"
-              style={{
-                backgroundColor: theme.card,
-                borderColor: theme.mutedText,
-              }}
-            >
-              {results.map((location) => (
-                <button
-                  key={`${location.latitude}-${location.longitude}`}
-                  onClick={() =>
-                    handleCitySelect(location)
-                  }
-                  className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-black/5"
-                >
-                  <MapPin
-                    size={18}
-                    style={{ color: theme.primary }}
-                  />
+  <div className="relative w-full md:w-auto">
 
-                  <div>
-                    <p
-                      className="text-sm font-medium"
-                      style={{ color: theme.text }}
-                    >
-                      {location.name}
-                    </p>
+    <div
+      className="flex w-full items-center gap-2 rounded-xl border px-4 py-3 md:w-72"
+      style={{
+        backgroundColor: theme.card,
+        borderColor: theme.mutedText,
+      }}
+    >
+      <MagnifyingGlass
+        size={20}
+        style={{
+          color: theme.mutedText,
+        }}
+      />
 
-                    <p
-                      className="text-xs"
-                      style={{ color: theme.mutedText }}
-                    >
-                      {location.admin1
-                        ? `${location.admin1}, `
-                        : ""}
-                      {location.country}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+      <input
+        type="text"
+        value={search}
+        onChange={handleSearchChange}
+        placeholder="Search city..."
+        className="w-full bg-transparent text-sm outline-none"
+        style={{
+          color: theme.text,
+        }}
+      />
 
-        {/* Current Location */}
-       <button
-  onClick={onCurrentLocation}
-  className="flex items-center gap-2 rounded-xl border px-4 py-3"
-  style={{
-    backgroundColor: theme.card,
-    borderColor: theme.mutedText,
-    color: theme.text,
-  }}
->
-  <MapPin size={20} />
-
-  <span className="text-sm">
-    Current Location
-  </span>
-</button>
-        {/* Notification */}
-        <button
-          className="rounded-xl border p-3"
+      {isSearching && (
+        <span
+          className="text-xs"
           style={{
-            backgroundColor: theme.card,
-            borderColor: theme.mutedText,
-            color: theme.text,
+            color: theme.mutedText,
           }}
         >
-          <Bell size={21} />
-        </button>
+          ...
+        </span>
+      )}
+    </div>
+
+
+    {/* Search Results */}
+
+    {results.length > 0 && (
+      <div
+        className="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border shadow-lg"
+        style={{
+          backgroundColor: theme.card,
+          borderColor: theme.mutedText,
+        }}
+      >
+        {results.map((location) => (
+          <button
+            key={`${location.latitude}-${location.longitude}`}
+            onClick={() =>
+              handleCitySelect(location)
+            }
+            className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-black/5"
+          >
+            <MapPin
+              size={18}
+              style={{
+                color: theme.primary,
+              }}
+            />
+
+            <div>
+              <p
+                className="text-sm font-medium"
+                style={{
+                  color: theme.text,
+                }}
+              >
+                {location.name}
+              </p>
+
+              <p
+                className="text-xs"
+                style={{
+                  color: theme.mutedText,
+                }}
+              >
+                {location.admin1
+                  ? `${location.admin1}, `
+                  : ""}
+                {location.country}
+              </p>
+            </div>
+          </button>
+        ))}
       </div>
+    )}
+
+  </div>
+
+
+  {/* Actions */}
+
+  <div className="flex w-full items-center gap-3 md:w-auto">
+
+    {/* Current Location */}
+
+    <button
+      onClick={onCurrentLocation}
+      className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-3 md:flex-none"
+      style={{
+        backgroundColor: theme.card,
+        borderColor: theme.mutedText,
+        color: theme.text,
+      }}
+    >
+      <MapPin size={20} />
+
+      <span className="text-sm">
+        Current Location
+      </span>
+    </button>
+
+
+    {/* Notification */}
+
+    <button
+      className="rounded-xl border p-3"
+      style={{
+        backgroundColor: theme.card,
+        borderColor: theme.mutedText,
+        color: theme.text,
+      }}
+    >
+      <Bell size={21} />
+    </button>
+
+  </div>
+
+</div>
     </header>
   );
 }
