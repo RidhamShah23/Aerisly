@@ -234,7 +234,7 @@ const loadWeatherForLocation = async (
 }
   return (
     <div
-      className="flex min-h-screen transition-colors duration-500"
+      className="flex min-h-screen transition-colors duration-500 w-full overflow-x-hidden"
       style={{
         backgroundColor: theme.background,
         color: theme.text,
@@ -244,8 +244,7 @@ const loadWeatherForLocation = async (
       <Sidebar theme={theme} />
 
 
-      <main className="flex-1 p-4 sm:p-8">
-
+      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
         <Header
   theme={theme}
   onCitySelect={handleCitySelect}
@@ -322,7 +321,7 @@ const loadWeatherForLocation = async (
             </h3>
 
 
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+            <div className="flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-5 sm:overflow-visible">
 
               {forecast.map((day) => (
                 <ForecastCard

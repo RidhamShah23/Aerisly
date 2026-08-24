@@ -39,7 +39,7 @@ function ForecastCard({
 
   return (
     <div
-      className="flex flex-col items-center rounded-2xl p-5 shadow-sm transition-colors duration-500"
+className="flex min-w-36 flex-col items-center rounded-2xl p-5 shadow-sm transition-colors duration-500 sm:min-w-0"
       style={{
         backgroundColor: theme.card,
         color: theme.text,
