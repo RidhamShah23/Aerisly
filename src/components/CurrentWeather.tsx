@@ -48,7 +48,7 @@ function CurrentWeather({
 
       {/* Main Weather */}
 
-      <div className="mt-6 flex items-center justify-between">
+      <div className="mt-6 flex items-center justify-between gap-4">
 
         <div>
 
@@ -78,10 +78,12 @@ function CurrentWeather({
         </div>
 
 
-        <WeatherIcon
-  condition={weather.condition}
-  color={theme.primary}
-/>
+        <div className="shrink-0">
+  <WeatherIcon
+    condition={weather.condition}
+    color={theme.primary}
+  />
+</div>
 
       </div>
 
