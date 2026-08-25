@@ -50,8 +50,8 @@ import WeatherSkeleton from "./components/WeatherSkeleton";
 
 const activities: Activity[] = [
   {
-    name: "Running",
-    type: "outdoor",
+    name: "Shopping",
+    type: "indoor",
     score: 0,
   },
   {
@@ -60,18 +60,13 @@ const activities: Activity[] = [
     score: 0,
   },
   {
-    name: "Cycling",
+    name: "Outdoor Work",
     type: "outdoor",
     score: 0,
   },
   {
     name: "Picnic",
     type: "outdoor",
-    score: 0,
-  },
-  {
-    name: "Indoor Movie",
-    type: "indoor",
     score: 0,
   },
 ];

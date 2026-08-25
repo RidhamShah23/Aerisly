@@ -15,7 +15,10 @@ export function calculateActivityScore(
   weather: ActivityWeather
 ): number {
 
-  let score = 100;
+  let score =
+  activity.name === "Shopping"
+    ? 70
+    : 100;
 
   const {
     temperature,
@@ -26,41 +29,38 @@ export function calculateActivityScore(
   } = weather;
 
 
-  // 🌡️ Temperature penalty
+  // 🌡️ Temperature
 
-  if (temperature < 10) {
-    score -= activity.type === "outdoor"
-      ? 25
-      : 0;
+  if (
+    activity.type === "outdoor" &&
+    temperature < 10
+  ) {
+    score -= 25;
   }
 
-  if (temperature < 5) {
-    score -= activity.type === "outdoor"
-      ? 15
-      : 0;
+  if (
+    activity.type === "outdoor" &&
+    temperature < 5
+  ) {
+    score -= 15;
   }
 
-  if (temperature > 35) {
-    score -= activity.type === "outdoor"
-      ? 20
-      : 0;
+  if (
+    activity.type === "outdoor" &&
+    temperature > 35
+  ) {
+    score -= 20;
   }
 
-  if (temperature > 40) {
-    score -= activity.type === "outdoor"
-      ? 20
-      : 0;
+  if (
+    activity.type === "outdoor" &&
+    temperature > 40
+  ) {
+    score -= 20;
   }
 
 
   // 💧 Humidity
-
-  if (
-    activity.name === "Running" &&
-    humidity > 75
-  ) {
-    score -= 15;
-  }
 
   if (
     activity.name === "Walking" &&
@@ -69,19 +69,29 @@ export function calculateActivityScore(
     score -= 8;
   }
 
+  if (
+    activity.name === "Outdoor Work" &&
+    humidity > 75
+  ) {
+    score -= 15;
+  }
+
+  if (
+    activity.name === "Picnic" &&
+    humidity > 80
+  ) {
+    score -= 10;
+  }
+
 
   // 🌧️ Rain
-
-  if (activity.name === "Running") {
-    score -= rainProbability * 0.35;
-  }
 
   if (activity.name === "Walking") {
     score -= rainProbability * 0.20;
   }
 
-  if (activity.name === "Cycling") {
-    score -= rainProbability * 0.45;
+  if (activity.name === "Outdoor Work") {
+    score -= rainProbability * 0.50;
   }
 
   if (activity.name === "Picnic") {
@@ -91,7 +101,8 @@ export function calculateActivityScore(
 
   // 💨 Wind
 
-  if (activity.name === "Cycling") {
+  if (activity.name === "Outdoor Work") {
+
     if (windSpeed > 20) {
       score -= 15;
     }
@@ -101,13 +112,8 @@ export function calculateActivityScore(
     }
   }
 
-  if (activity.name === "Running") {
-    if (windSpeed > 30) {
-      score -= 12;
-    }
-  }
-
   if (activity.name === "Picnic") {
+
     if (windSpeed > 25) {
       score -= 15;
     }
@@ -130,26 +136,26 @@ export function calculateActivityScore(
     score -= 10;
   }
 
+ // 🛍️ Shopping
 
-  // 🎬 Indoor Movie
+if (activity.name === "Shopping") {
 
-  if (activity.name === "Indoor Movie") {
-
-    // Bad outdoor conditions
-    // make indoor activities better.
-
-    if (rainProbability >= 60) {
-      score += 5;
-    }
-
-    if (temperature > 35) {
-      score += 5;
-    }
-
-    if (windSpeed > 30) {
-      score += 5;
-    }
+  if (rainProbability >= 60) {
+    score += 10;
   }
+
+  if (temperature > 35) {
+    score += 10;
+  }
+
+  if (windSpeed > 30) {
+    score += 5;
+  }
+
+  if (uvIndex >= 7) {
+    score += 5;
+  }
+}
 
 
   return Math.max(

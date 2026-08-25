@@ -1,9 +1,8 @@
 import {
-  PersonSimpleRun,
+  ShoppingBag,
   PersonSimpleWalk,
-  Bicycle,
+  Toolbox,
   PicnicTable,
-  FilmSlate,
 } from "@phosphor-icons/react";
 
 import type { Icon } from "@phosphor-icons/react";
@@ -15,11 +14,10 @@ interface ActivityRecommendationProps {
 }
 
 const activityIcons: Record<string, Icon> = {
-  Running: PersonSimpleRun,
+  Shopping: ShoppingBag,
   Walking: PersonSimpleWalk,
-  Cycling: Bicycle,
+  "Outdoor Work": Toolbox,
   Picnic: PicnicTable,
-  "Indoor Movie": FilmSlate,
 };
 
 function getScoreLabel(score: number): string {
