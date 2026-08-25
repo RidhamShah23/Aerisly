@@ -14,6 +14,8 @@ interface NavItem {
 }
 interface SidebarProps {
   theme: WeatherTheme;
+  activePage: string;
+  onPageChange: (page: string) => void;
 }
 const navItems: NavItem[] = [
   {
@@ -38,8 +40,12 @@ const navItems: NavItem[] = [
   },
 ];
 
-function Sidebar({ theme }: SidebarProps) {
-    return (
+function Sidebar({
+  theme,
+  activePage,
+  onPageChange,
+}: SidebarProps) {
+      return (
     <aside style={{
   backgroundColor: theme.card,
   color: theme.text,
@@ -59,25 +65,30 @@ function Sidebar({ theme }: SidebarProps) {
       </h1>
 
       <nav className="space-y-2">
-        {navItems.map((item, index) => {
+        {navItems.map((item) => {
           const IconComponent = item.icon;
 
           return (
-            <button
-              key={item.label}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${
-                index === 0
-                  ? "bg-green-100 text-green-700"
-                  : "text-gray-500 hover:bg-gray-50"
-              }`}
-            >
-              <IconComponent
-                size={22}
-                weight={index === 0 ? "fill" : "regular"}
-              />
+           <button
+  key={item.label}
+  onClick={() => onPageChange(item.label)}
+  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl ${
+    activePage === item.label
+      ? "bg-green-100 text-green-700"
+      : "text-gray-500 hover:bg-gray-50"
+  }`}
+>
+  <IconComponent
+    size={22}
+    weight={
+      activePage === item.label
+        ? "fill"
+        : "regular"
+    }
+  />
 
-              <span>{item.label}</span>
-            </button>
+  <span>{item.label}</span>
+</button>
           );
         })}
       </nav>

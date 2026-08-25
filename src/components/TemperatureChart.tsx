@@ -74,24 +74,26 @@ function TemperatureChart({
 
         data: temperatures,
 
-        borderColor: theme.primary,
+       borderColor: theme.primary,
+borderWidth: 3,
 
-        backgroundColor:
-          `${theme.primary}20`,
+backgroundColor: `${theme.primary}15`,
 
-        fill: true,
+fill: true,
 
-        tension: 0.4,
+tension: 0.4,
 
-        pointRadius: 5,
+pointRadius: 5,
 
-        pointBackgroundColor:
-          theme.accent,
+pointHoverRadius: 7,
 
-        pointBorderColor:
-          theme.card,
+pointBackgroundColor: theme.card,
 
-        pointBorderWidth: 2,
+pointBorderColor: theme.primary,
+
+pointBorderWidth: 3,
+
+pointHoverBackgroundColor: theme.primary,
       },
     ],
   };
@@ -203,43 +205,76 @@ function TemperatureChart({
     },
 
     tooltip: {
-      callbacks: {
-        label: (
-          context: TooltipItem<"line">
-        ) => {
-          const index =
-            context.dataIndex;
+  backgroundColor: theme.card,
 
-          const rain =
-            hourlyWeather[index]
-              ?.rainProbability ?? 0;
+  titleColor: theme.text,
 
-          return ` ${context.parsed.y}°C • Rain ${rain}%`;
-        },
-      },
+  bodyColor: theme.text,
+
+  borderColor: `${theme.primary}40`,
+
+  borderWidth: 1,
+
+  padding: 12,
+
+  displayColors: false,
+
+  callbacks: {
+    label: (
+      context: TooltipItem<"line">
+    ) => {
+      const index =
+        context.dataIndex;
+
+      const rain =
+        hourlyWeather[index]
+          ?.rainProbability ?? 0;
+
+      return `${context.parsed.y}°C  •  Rain ${rain}%`;
     },
+  },
+},
   },
 
   scales: {
-    y: {
-      beginAtZero: false,
+   y: {
+  beginAtZero: false,
 
-      grid: {
-        display: false,
-      },
+  grace: "10%",
 
-      ticks: {
-        callback: (
-          value: string | number
-        ) => `${value}°`,
-      },
-    },
+  grid: {
+    color: `${theme.mutedText}20`,
+    drawBorder: false,
+  },
 
-    x: {
-      grid: {
-        display: false,
-      },
-    },
+  border: {
+    display: false,
+  },
+
+  ticks: {
+    padding: 10,
+
+    color: theme.mutedText,
+
+    callback: (
+      value: string | number
+    ) => `${value}°`,
+  },
+},
+  x: {
+  grid: {
+    display: false,
+  },
+
+  border: {
+    display: false,
+  },
+
+  ticks: {
+    color: theme.mutedText,
+    padding: 10,
+  },
+},
   },
 };
 

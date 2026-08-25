@@ -72,8 +72,7 @@ const activities: Activity[] = [
 ];
 
 function App() {
-  const [weather,setWeather]=
-useState<CurrentWeatherType>({
+  const [weather,setWeather]= useState<CurrentWeatherType>({
   city: "Ahmedabad",
   temperature: 32,
   condition: "sunny",
@@ -82,12 +81,10 @@ useState<CurrentWeatherType>({
   windSpeed: 12,
   uvIndex: 6,
 });
-const [forecast, setForecast] =
-  useState<ForecastDay[]>([]);
-
-
+const [forecast, setForecast] = useState<ForecastDay[]>([]);
 const theme = weatherThemes[weather.condition];
 const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>([]);
+ const [activePage, setActivePage] = useState("Dashboard");
 
 const activityWeather = {
   temperature: weather.temperature,
@@ -219,6 +216,8 @@ const loadWeatherForLocation = async (
     );
   }, []);
 
+ 
+
   function getUVLevel(uvIndex: number) {
   if (uvIndex <= 2) return "Low";
   if (uvIndex <= 5) return "Moderate";
@@ -236,7 +235,11 @@ const loadWeatherForLocation = async (
       }}
     >
 
-      <Sidebar theme={theme} />
+      <Sidebar
+        theme={theme}
+        activePage={activePage}
+        onPageChange={setActivePage}
+      />
 
 
       <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
