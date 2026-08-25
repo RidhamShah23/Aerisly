@@ -171,8 +171,9 @@ function formatHour(time: string): string {
   return new Date(time).toLocaleTimeString(
     "en-US",
     {
-      hour: "numeric",
-      hour12: true,
+      hour: "2-digit",
+      minute:"2-digit",
+      hour12: false,
     }
   );
 }
@@ -233,7 +234,7 @@ export function generateWeatherInsights(
 ): WeatherInsight[] {
   const insights: WeatherInsight[] = [];
 
-  // 🌧️ Rain
+  //Rain
   if (weather.rainProbability >= 60) {
     insights.push({
       type: "rain",
@@ -242,7 +243,7 @@ export function generateWeatherInsights(
     });
   }
 
-  // 🌡️ Heat
+  //Heat
   if (weather.temperature >= 35) {
     insights.push({
       type: "heat",
@@ -251,7 +252,7 @@ export function generateWeatherInsights(
     });
   }
 
-  // 🥵 Feels-like
+  //Feels-like
   if (
     weather.feelsLike - weather.temperature >= 4
   ) {
@@ -262,7 +263,7 @@ export function generateWeatherInsights(
     });
   }
 
-  // 💧 Humidity
+  //Humidity
   if (weather.humidity >= 80) {
     insights.push({
       type: "humidity",
@@ -277,7 +278,7 @@ export function generateWeatherInsights(
     });
   }
 
-  // 💨 Wind
+  //Wind
   if (weather.windSpeed >= 30) {
     insights.push({
       type: "wind",
@@ -286,7 +287,7 @@ export function generateWeatherInsights(
     });
   }
 
-  // ☀️ UV
+  //UV
   if (weather.uvIndex >= 7) {
     insights.push({
       type: "uv",
@@ -295,7 +296,7 @@ export function generateWeatherInsights(
     });
   }
 
-  // ☁️ Cloudy
+  //Cloudy
   if (
     weather.condition === "cloudy" &&
     weather.rainProbability < 40
@@ -308,7 +309,7 @@ export function generateWeatherInsights(
     });
   }
 
-  // ☀️ Comfortable fallback
+  //Comfortable fallback
   if (insights.length === 0) {
     insights.push({
       type: "comfortable",

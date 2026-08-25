@@ -193,56 +193,55 @@ function TemperatureChart({
 }, [hourlyWeather]);
 
   const options = {
-    responsive: true,
+  responsive: true,
 
-    maintainAspectRatio: true,
+  maintainAspectRatio: false,
 
-    plugins: {
-      legend: {
+  plugins: {
+    legend: {
+      display: false,
+    },
+
+    tooltip: {
+      callbacks: {
+        label: (
+          context: TooltipItem<"line">
+        ) => {
+          const index =
+            context.dataIndex;
+
+          const rain =
+            hourlyWeather[index]
+              ?.rainProbability ?? 0;
+
+          return ` ${context.parsed.y}°C • Rain ${rain}%`;
+        },
+      },
+    },
+  },
+
+  scales: {
+    y: {
+      beginAtZero: false,
+
+      grid: {
         display: false,
       },
 
-      tooltip: {
-        callbacks: {
-          label: (
-            context: TooltipItem<"line">
-          ) => {
-
-            const index =
-              context.dataIndex;
-
-            const rain =
-              hourlyWeather[index]
-                ?.rainProbability ?? 0;
-
-            return ` ${context.parsed.y}°C • Rain ${rain}%`;
-          },
-        },
+      ticks: {
+        callback: (
+          value: string | number
+        ) => `${value}°`,
       },
     },
 
-    scales: {
-      y: {
-        beginAtZero: false,
-
-        grid: {
-          display: false,
-        },
-
-        ticks: {
-          callback: (
-            value: string | number
-          ) => `${value}°`,
-        },
-      },
-
-      x: {
-        grid: {
-          display: false,
-        },
+    x: {
+      grid: {
+        display: false,
       },
     },
-  };
+  },
+};
 
   return (
     <div
@@ -276,11 +275,11 @@ function TemperatureChart({
       {/* Chart */}
 
       <div
-        ref={containerRef}
-        className="relative"
-      >
+  ref={containerRef}
+  className="relative h-64 w-full sm:h-72 lg:h-80"
+>
 
-      <Line
+ <Line
   ref={chartRef}
   data={data}
   options={options}

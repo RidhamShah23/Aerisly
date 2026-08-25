@@ -130,18 +130,38 @@ if (
 }
 
 
-// Fallback
-if (insights.length === 0) {
+// Default insights
+
+if (insights.length < 4) {
   insights.push({
     title: "Weather looks stable",
     description:
-      "No major weather changes are expected right now.",
+      "No major weather concerns are expected right now.",
     icon: Sun,
   });
 }
 
+if (insights.length < 4) {
+  insights.push({
+    title: "Conditions are manageable",
+    description:
+      "Current weather conditions are suitable for most daily activities.",
+    icon: Cloud,
+  });
+}
+
+if (insights.length < 4) {
+  insights.push({
+    title: "Stay updated",
+    description:
+      "Weather conditions can change, so check the forecast before making outdoor plans.",
+    icon: Thermometer,
+  });
+}
+
+
 const visibleInsights =
-  insights.slice(0, 3);
+  insights.slice(0, 4);
   return (
     <div
       className="rounded-3xl p-6 shadow-sm"
