@@ -1,4 +1,3 @@
-import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import CurrentWeather from "./components/CurrentWeather";
 import { useEffect, useState } from "react";
@@ -83,8 +82,8 @@ function App() {
 });
 const [forecast, setForecast] = useState<ForecastDay[]>([]);
 const theme = weatherThemes[weather.condition];
+const [activePage, setActivePage] = useState("Dashboard");
 const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>([]);
- const [activePage, setActivePage] = useState("Dashboard");
 
 const activityWeather = {
   temperature: weather.temperature,
@@ -235,21 +234,22 @@ const loadWeatherForLocation = async (
       }}
     >
 
-      <Sidebar
-        theme={theme}
-        activePage={activePage}
-        onPageChange={setActivePage}
-      />
-
 
       <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
         <Header
   theme={theme}
   onCitySelect={handleCitySelect}
-  onCurrentLocation={
-    handleCurrentLocation
+  onCurrentLocation={handleCurrentLocation}
+  onOpenLocations={() =>
+    setActivePage("Locations")
+  }
+  onOpenSettings={() =>
+    setActivePage("Settings")
   }
 />
+
+{activePage === "Dashboard" && (
+  <div>
 {isLoading ? (
   <WeatherSkeleton theme={theme} />
 ) : (
@@ -369,15 +369,41 @@ const loadWeatherForLocation = async (
   />
 )}
           </div>
+</div>
 
         </div>
+)}
 
+
+  </div>
+)}
+{activePage === "Locations" && (
+  <div className="mt-8">
+    <h2
+      className="text-2xl font-semibold"
+      style={{
+        color: theme.text,
+      }}
+    >
+      Saved Locations
+    </h2>
+  </div>
+)}
+
+{activePage === "Settings" && (
+  <div className="mt-8">
+    <h2
+      className="text-2xl font-semibold"
+      style={{
+        color: theme.text,
+      }}
+    >
+      Settings
+    </h2>
   </div>
 )}
 
       </main>
-      
-
     </div>
   );
 }

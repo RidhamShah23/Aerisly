@@ -3,6 +3,7 @@ import type { ChangeEvent } from "react";import {
   MagnifyingGlass,
   Bell,
   MapPin,
+  Gear,
 } from "@phosphor-icons/react";
 
 import type { WeatherTheme } from "../types/weather";
@@ -11,16 +12,23 @@ import { searchCity } from "../services/geocodingApi";
 
 interface HeaderProps {
   theme: WeatherTheme;
+
   onCitySelect: (
     location: LocationResult
   ) => void;
+
   onCurrentLocation: () => void;
+
+  onOpenLocations: () => void;
+  onOpenSettings: () => void;
 }
 
 function Header({
   theme,
   onCitySelect,
   onCurrentLocation,
+  onOpenLocations,
+  onOpenSettings,
 }: HeaderProps) {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState<LocationResult[]>([]);
@@ -221,6 +229,31 @@ function Header({
     >
       <Bell size={21} />
     </button>
+<button
+  onClick={onOpenLocations}
+  className="rounded-xl border p-3 transition"
+  style={{
+    backgroundColor: theme.card,
+    borderColor: theme.mutedText,
+    color: theme.text,
+  }}
+  title="Saved Locations"
+>
+  <MapPin size={21} />
+</button>
+
+<button
+  onClick={onOpenSettings}
+  className="rounded-xl border p-3 transition"
+  style={{
+    backgroundColor: theme.card,
+    borderColor: theme.mutedText,
+    color: theme.text,
+  }}
+  title="Settings"
+>
+  <Gear size={21} />
+</button>
 
   </div>
 
