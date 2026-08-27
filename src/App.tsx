@@ -44,7 +44,7 @@ import {
 } from "./services/location";
 import SmartWeatherInsights from "./components/SmartWeatherInsights";
 import WeatherSkeleton from "./components/WeatherSkeleton";
-
+import LocationsPage from "./components/LocationsPage";
 
 
 const activities: Activity[] = [
@@ -100,15 +100,6 @@ const activityWeather = {
   uvIndex: weather.uvIndex,
   
 };
-const handleCitySelect = async (
-  location: LocationResult
-) => {
-  await loadWeatherForLocation(
-    location.latitude,
-    location.longitude,
-    location.name
-  );
-};
 
 
 const scoredActivities = activities.map((activity) => ({
@@ -138,7 +129,16 @@ const handleCurrentLocation = async () => {
         coordinates.latitude,
         coordinates.longitude
       );
+const locationResult: LocationResult = {
+  name: location.city,
+  latitude: coordinates.latitude,
+  longitude: coordinates.longitude,
 
+  country: "",
+  admin1: "",
+};
+
+saveLocation(locationResult);
     await loadWeatherForLocation(
       coordinates.latitude,
       coordinates.longitude,
@@ -215,8 +215,77 @@ const loadWeatherForLocation = async (
     );
   }, []);
 
- 
+ const [savedLocations, setSavedLocations] = useState<LocationResult[]>(() => {
+    const saved =
+      localStorage.getItem("savedLocations");
 
+    return saved
+      ? JSON.parse(saved)
+      : [];
+  });
+  useEffect(() => {
+  localStorage.setItem(
+    "savedLocations",
+    JSON.stringify(savedLocations)
+  );
+}, [savedLocations]);
+const saveLocation = (
+  location: LocationResult
+) => {
+  setSavedLocations((previousLocations) => {
+    const alreadyExists =
+      previousLocations.some(
+        (savedLocation) =>
+          savedLocation.latitude ===
+            location.latitude &&
+          savedLocation.longitude ===
+            location.longitude
+      );
+
+    if (alreadyExists) {
+      return previousLocations;
+    }
+
+    return [
+      ...previousLocations,
+      location,
+    ];
+  });
+};
+const removeLocation = (
+  location: LocationResult
+) => {
+  setSavedLocations((previousLocations) =>
+    previousLocations.filter(
+      (savedLocation) =>
+        savedLocation.latitude !==
+          location.latitude ||
+        savedLocation.longitude !==
+          location.longitude
+    )
+  );
+};
+const handleCitySelect = async (
+  location: LocationResult
+) => {
+  try {
+    saveLocation(location);
+
+    await loadWeatherForLocation(
+      location.latitude,
+      location.longitude,
+      location.name
+    );
+
+    setActivePage("Dashboard");
+
+  } catch (error) {
+    console.error(
+      "City selection failed:",
+      error
+    );
+  }
+};
   function getUVLevel(uvIndex: number) {
   if (uvIndex <= 2) return "Low";
   if (uvIndex <= 5) return "Moderate";
@@ -379,6 +448,15 @@ const loadWeatherForLocation = async (
 )}
 {activePage === "Locations" && (
   <div className="mt-8">
+    <LocationsPage
+    locations={savedLocations}
+    theme={theme}
+    onSelectLocation={async (location) => {
+      await handleCitySelect(location);
+      setActivePage("Dashboard");
+    }}
+    onRemoveLocation={removeLocation}
+  />
     <h2
       className="text-2xl font-semibold"
       style={{
