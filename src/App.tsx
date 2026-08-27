@@ -277,8 +277,6 @@ const handleCitySelect = async (
       location.name
     );
 
-    setActivePage("Dashboard");
-
   } catch (error) {
     console.error(
       "City selection failed:",
@@ -447,6 +445,7 @@ const handleCitySelect = async (
   </div>
 )}
 {activePage === "Locations" && (
+  
   <div className="mt-8">
     <LocationsPage
     locations={savedLocations}
@@ -457,14 +456,7 @@ const handleCitySelect = async (
     }}
     onRemoveLocation={removeLocation}
   />
-    <h2
-      className="text-2xl font-semibold"
-      style={{
-        color: theme.text,
-      }}
-    >
-      Saved Locations
-    </h2>
+    
   </div>
 )}
 
