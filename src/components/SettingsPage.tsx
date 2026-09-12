@@ -100,7 +100,7 @@ function SettingsPage({
 
           <button
            onClick={() =>
-  onTemperatureUnitChange("F")
+  onTemperatureUnitChange("C")
 }
             className="rounded-xl px-5 py-3 text-sm font-medium"
             style={{

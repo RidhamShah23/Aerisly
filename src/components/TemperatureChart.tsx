@@ -264,7 +264,7 @@ callback: (
   value: string | number
 ) => `${value}°${temperatureUnit}`,
 },
-   },
+   }, 
   x: {
   grid: {
     display: false,
