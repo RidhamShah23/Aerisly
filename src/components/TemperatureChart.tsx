@@ -41,11 +41,15 @@ ChartJS.register(
 interface TemperatureChartProps {
   theme: WeatherTheme;
   hourlyWeather: HourlyWeather[];
+  displayTemperature: (temperature: number) => number;
+  temperatureUnit: "C" | "F";
 }
 
 function TemperatureChart({
   theme,
   hourlyWeather,
+  displayTemperature,
+  temperatureUnit,
 }: TemperatureChartProps) {
 
   const chartRef =
@@ -62,8 +66,8 @@ function TemperatureChart({
   );
 
   const temperatures = hourlyWeather.map(
-    (hour) => hour.temperature
-  );
+  (hour) => displayTemperature(hour.temperature)
+);
 
   const data = {
     labels,
@@ -143,9 +147,9 @@ pointHoverBackgroundColor: theme.primary,
         xScale.getPixelForValue(index);
 
       const y =
-        yScale.getPixelForValue(
-          hour.temperature
-        );
+  yScale.getPixelForValue(
+    displayTemperature(hour.temperature)
+  );
 
       const left =
         canvasRect.left -
@@ -192,7 +196,7 @@ pointHoverBackgroundColor: theme.primary,
     window.clearTimeout(timer);
     resizeObserver.disconnect();
   };
-}, [hourlyWeather]);
+}, [hourlyWeather,displayTemperature]);
 
   const options = {
   responsive: true,
@@ -230,7 +234,7 @@ pointHoverBackgroundColor: theme.primary,
         hourlyWeather[index]
           ?.rainProbability ?? 0;
 
-      return `${context.parsed.y}°C  •  Rain ${rain}%`;
+     return `${context.parsed.y}°${temperatureUnit}  •  Rain ${rain}%`;
     },
   },
 },
@@ -256,11 +260,11 @@ pointHoverBackgroundColor: theme.primary,
 
     color: theme.mutedText,
 
-    callback: (
-      value: string | number
-    ) => `${value}°`,
-  },
+callback: (
+  value: string | number
+) => `${value}°${temperatureUnit}`,
 },
+   },
   x: {
   grid: {
     display: false,

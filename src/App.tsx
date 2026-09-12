@@ -444,13 +444,13 @@ const displayWindSpeed = (
             <div className="flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-5 sm:overflow-visible">
 
               {forecast.map((day) => (
-                <ForecastCard
-                  key={day.day}
-                  forecast={day}
-                  theme={theme}
-                  displayTemperature={displayTemperature}
-                />
-              ))}
+              <ForecastCard
+                key={day.day}
+                forecast={day}
+                theme={theme}
+                displayTemperature={displayTemperature}
+              />
+            ))}
 
             </div>
 
@@ -460,10 +460,13 @@ const displayWindSpeed = (
           {/* Temperature Chart */}
 
           <div className="mt-8">
-<TemperatureChart
-  theme={theme}
-  hourlyWeather={hourlyWeather}
-/> </div>
+            <TemperatureChart
+              theme={theme}
+              hourlyWeather={hourlyWeather}
+              displayTemperature={displayTemperature}
+              temperatureUnit={temperatureUnit}
+            />
+            </div>
 
           {/* Activity Recommendation */}
 
