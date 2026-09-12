@@ -45,6 +45,7 @@ import {
 import SmartWeatherInsights from "./components/SmartWeatherInsights";
 import WeatherSkeleton from "./components/WeatherSkeleton";
 import LocationsPage from "./components/LocationsPage";
+import SettingsPage from "./components/SettingsPage";
 
 
 const activities: Activity[] = [
@@ -292,6 +293,57 @@ const handleCitySelect = async (
 
   return "Extreme";
 }
+const [temperatureUnit, setTemperatureUnit] =
+  useState<"C" | "F">(() => {
+    return (
+      (localStorage.getItem(
+        "temperatureUnit"
+      ) as "C" | "F") || "C"
+    );
+  });
+
+const [windUnit, setWindUnit] =
+  useState<"km/h" | "mph">(() => {
+    return (
+      (localStorage.getItem(
+        "windUnit"
+      ) as "km/h" | "mph") || "km/h"
+    );
+  });
+  useEffect(() => {
+  localStorage.setItem(
+    "temperatureUnit",
+    temperatureUnit
+  );
+}, [temperatureUnit]);
+
+useEffect(() => {
+  localStorage.setItem(
+    "windUnit",
+    windUnit
+  );
+}, [windUnit]);
+const displayTemperature = (
+  temperature: number
+) => {
+  if (temperatureUnit === "F") {
+    return Math.round(
+      (temperature * 9) / 5 + 32
+    );
+  }
+
+  return temperature;
+};
+
+const displayWindSpeed = (
+  speed: number
+) => {
+  if (windUnit === "mph") {
+    return Math.round(speed * 0.621371);
+  }
+
+  return speed;
+};
   return (
     <div
       className="flex min-h-screen transition-colors duration-500 w-full overflow-x-hidden"
@@ -336,9 +388,10 @@ const handleCitySelect = async (
         <div className="mt-8">
 
           <CurrentWeather
-            weather={weather}
-            theme={theme}
-          />
+  weather={weather}
+  theme={theme}
+  displayTemperature={displayTemperature}
+/>
 
 
           {/* Weather Stats */}
@@ -356,7 +409,7 @@ const handleCitySelect = async (
             <WeatherStatCard
               icon={Wind}
               label="Wind Speed"
-              value={`${weather.windSpeed} km/h`}
+               value={`${displayWindSpeed(weather.windSpeed)} ${windUnit}`}
               description="Moderate"
               theme={theme}
             />
@@ -461,16 +514,15 @@ const handleCitySelect = async (
 )}
 
 {activePage === "Settings" && (
-  <div className="mt-8">
-    <h2
-      className="text-2xl font-semibold"
-      style={{
-        color: theme.text,
-      }}
-    >
-      Settings
-    </h2>
-  </div>
+  <SettingsPage
+  theme={theme}
+  temperatureUnit={temperatureUnit}
+  windUnit={windUnit}
+  onTemperatureUnitChange={
+    setTemperatureUnit
+  }
+  onWindUnitChange={setWindUnit}
+/>
 )}
 
       </main>

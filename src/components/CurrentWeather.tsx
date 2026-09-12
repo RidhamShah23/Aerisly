@@ -15,12 +15,14 @@ import type {
 interface CurrentWeatherProps {
   weather: CurrentWeatherType;
   theme: WeatherTheme;
+  displayTemperature: (temperature: number) => number;
 }
 
 
 function CurrentWeather({
   weather,
   theme,
+  displayTemperature,
 }: CurrentWeatherProps) {
 
   return (
@@ -52,9 +54,9 @@ function CurrentWeather({
 
         <div>
 
-          <p className="text-6xl font-semibold">
-            {weather.temperature}°
-          </p>
+       <p className="text-6xl font-semibold">
+  {displayTemperature(weather.temperature)}°
+</p>
 
           <p
             className="mt-2 text-lg"
@@ -72,7 +74,7 @@ function CurrentWeather({
               color: theme.mutedText,
             }}
           >
-            Feels like {weather.feelsLike}°
+            Feels like {displayTemperature(weather.feelsLike)}°
           </p>
 
         </div>
