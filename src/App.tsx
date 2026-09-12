@@ -224,12 +224,14 @@ const loadWeatherForLocation = async (
       ? JSON.parse(saved)
       : [];
   });
+
   useEffect(() => {
   localStorage.setItem(
     "savedLocations",
     JSON.stringify(savedLocations)
   );
 }, [savedLocations]);
+
 const saveLocation = (
   location: LocationResult
 ) => {
@@ -446,6 +448,7 @@ const displayWindSpeed = (
                   key={day.day}
                   forecast={day}
                   theme={theme}
+                  displayTemperature={displayTemperature}
                 />
               ))}
 

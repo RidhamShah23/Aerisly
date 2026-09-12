@@ -19,6 +19,7 @@ import type {
 interface ForecastCardProps {
   forecast: ForecastDay;
   theme: WeatherTheme;
+  displayTemperature: (temperature: number) => number;
 }
 
 const weatherIcons: Record<WeatherCondition, Icon> = {
@@ -34,6 +35,7 @@ const weatherIcons: Record<WeatherCondition, Icon> = {
 function ForecastCard({
   forecast,
   theme,
+  displayTemperature,
 }: ForecastCardProps) {
   const WeatherIcon = weatherIcons[forecast.condition];
 
@@ -60,14 +62,14 @@ className="flex min-w-36 flex-col items-center rounded-2xl p-5 shadow-sm transit
       />
 
       <p className="text-xl font-semibold">
-        {forecast.high}°
+       {displayTemperature(forecast.high)}°
       </p>
 
       <p
         className="mt-1 text-sm"
         style={{ color: theme.mutedText }}
       >
-        {forecast.low}°
+        {displayTemperature(forecast.low)}°
       </p>
     </div>
   );
