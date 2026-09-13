@@ -92,6 +92,14 @@ export function mapCurrentWeather(
   data: WeatherApiResponse,
   city: string
 ): CurrentWeather {
+  const now = new Date();
+
+const currentHourIndex = data.hourly.time.findIndex(
+  (time) => new Date(time) >= now
+);
+
+const visibilityIndex =
+  currentHourIndex === -1 ? 0 : currentHourIndex;
   return {
     city,
     temperature: Math.round(
@@ -118,6 +126,7 @@ export function mapCurrentWeather(
     ),
     sunrise: data.daily.sunrise[0],
     sunset: data.daily.sunset[0],
+    visibility: data.hourly.visibility[visibilityIndex],
   };
 }
 

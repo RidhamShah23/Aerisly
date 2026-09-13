@@ -13,6 +13,7 @@ export interface WeatherApiResponse {
     temperature_2m: number[];
     precipitation_probability: number[];
     time: string[];
+    visibility: number[];
   };
 
   daily: {
@@ -27,7 +28,7 @@ export interface WeatherApiResponse {
 
 export async function getWeather(
   latitude: number,
-  longitude: number
+  longitude: number,
 ): Promise<WeatherApiResponse> {
   const params = new URLSearchParams({
     latitude: String(latitude),
@@ -36,11 +37,9 @@ export async function getWeather(
     current:
       "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m,uv_index,weather_code",
 
-    hourly:
-      "temperature_2m,precipitation_probability",
+    hourly: "temperature_2m,precipitation_probability,visibility",
 
-    daily:
-      "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset",
+    daily: "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset",
 
     timezone: "auto",
 
@@ -48,7 +47,7 @@ export async function getWeather(
   });
 
   const response = await fetch(
-    `https://api.open-meteo.com/v1/forecast?${params}`
+    `https://api.open-meteo.com/v1/forecast?${params}`,
   );
 
   if (!response.ok) {

@@ -26,6 +26,7 @@ export interface CurrentWeather {
   uvIndex: number;
   sunrise: string;
   sunset: string;
+  visibility: number;
 }
 export interface ForecastDay{
   day: string;

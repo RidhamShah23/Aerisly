@@ -9,7 +9,7 @@ import type {
   ForecastDay,
   Activity,
 } from "./types/weather";
-import { Drop, Wind, Sun } from "@phosphor-icons/react";
+import { Drop, Wind, Sun, Eye } from "@phosphor-icons/react";
 import WeatherStatCard from "./components/WeatherStatCard";
 import ForecastCard from "./components/ForecastCard";
 import TemperatureChart from "./components/TemperatureChart";
@@ -75,6 +75,7 @@ function App() {
     humidity: 55,
     windSpeed: 12,
     uvIndex: 6,
+    visibility: 10000,
     sunrise: "06:00",
     sunset: "18:30",
   });
@@ -250,7 +251,7 @@ function App() {
 
     return temperature;
   };
-
+  const displayVisibility = (weather.visibility / 1000).toFixed(1);
   const displayWindSpeed = (speed: number) => {
     if (windUnit === "mph") {
       return Math.round(speed * 0.621371);
@@ -303,8 +304,8 @@ function App() {
 
                       {/* Weather Stats */}
 
-                     <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
-                        <WeatherStatCard
+<div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+                          <WeatherStatCard
                           icon={Drop}
                           label="Humidity"
                           value={`${weather.humidity}%`}
@@ -327,6 +328,13 @@ function App() {
                           description={getUVLevel(weather.uvIndex)}
                           theme={theme}
                         />
+                        <WeatherStatCard
+  icon={Eye}
+  label="Visibility"
+  value={`${displayVisibility} km`}
+  description="Clear view"
+  theme={theme}
+/>
                       </div>
 
                       {/* 5-Day Forecast */}
@@ -361,7 +369,7 @@ function App() {
                           hourlyWeather={hourlyWeather}
                           displayTemperature={displayTemperature}
                           temperatureUnit={temperatureUnit}
-                        />  
+                        />
                       </div>
                       {/* Sun & Daylight */}
 
