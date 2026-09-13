@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ChangeEvent } from "react";import {
   MagnifyingGlass,
-  Bell,
   MapPin,
   Gear,
 } from "@phosphor-icons/react";
@@ -216,19 +215,6 @@ function Header({
       </span>
     </button>
 
-
-    {/* Notification */}
-
-    <button
-      className="rounded-xl border p-3"
-      style={{
-        backgroundColor: theme.card,
-        borderColor: theme.mutedText,
-        color: theme.text,
-      }}
-    >
-      <Bell size={21} />
-    </button>
 <button
   onClick={onOpenLocations}
   className="rounded-xl border p-3 transition"

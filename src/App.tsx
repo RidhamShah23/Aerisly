@@ -303,7 +303,7 @@ function App() {
 
                       {/* Weather Stats */}
 
-                      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                     <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
                         <WeatherStatCard
                           icon={Drop}
                           label="Humidity"

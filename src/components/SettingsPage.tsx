@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { Thermometer, Wind, Bell } from "@phosphor-icons/react";
+import { Thermometer, Wind } from "@phosphor-icons/react";
 import type { WeatherTheme } from "../types/weather";
 
 interface SettingsPageProps {
@@ -22,7 +21,6 @@ function SettingsPage({
   onWindUnitChange,
 }: SettingsPageProps) {
   const navigate = useNavigate();
-  const [weatherAlerts, setWeatherAlerts] = useState(true);
 
   return (
     <div className="mt-8 max-w-3xl">
@@ -181,60 +179,7 @@ function SettingsPage({
           </button>
         </div>
       </div>
-
-      {/* Alerts */}
-
-      <div
-        className="mt-5 flex items-center justify-between rounded-3xl p-6"
-        style={{
-          backgroundColor: theme.card,
-        }}
-      >
-        <div className="flex items-center gap-4">
-          <div
-            className="flex h-11 w-11 items-center justify-center rounded-xl"
-            style={{
-              backgroundColor: `${theme.primary}20`,
-            }}
-          >
-            <Bell
-              size={24}
-              weight="duotone"
-              style={{
-                color: theme.primary,
-              }}
-            />
-          </div>
-
-          <div>
-            <h3 className="font-semibold">Weather Alerts</h3>
-
-            <p
-              className="text-sm"
-              style={{
-                color: theme.mutedText,
-              }}
-            >
-              Receive important weather notifications
-            </p>
-          </div>
-        </div>
-
-        <button
-          onClick={() => setWeatherAlerts(!weatherAlerts)}
-          className="relative h-7 w-12 rounded-full transition"
-          style={{
-            backgroundColor: weatherAlerts ? theme.primary : theme.mutedText,
-          }}
-        >
-          <span
-            className="absolute top-1 h-5 w-5 rounded-full bg-white transition"
-            style={{
-              left: weatherAlerts ? "26px" : "4px",
-            }}
-          />
-        </button>
-      </div>
+      
     </div>
   );
 }
