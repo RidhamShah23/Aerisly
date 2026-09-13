@@ -116,6 +116,8 @@ export function mapCurrentWeather(
     uvIndex: Math.round(
       data.current.uv_index
     ),
+    sunrise: data.daily.sunrise[0],
+    sunset: data.daily.sunset[0],
   };
 }
 

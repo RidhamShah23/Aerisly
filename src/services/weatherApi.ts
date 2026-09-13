@@ -20,6 +20,8 @@ export interface WeatherApiResponse {
     temperature_2m_min: number[];
     weather_code: number[];
     time: string[];
+    sunrise: string[];
+    sunset: string[];
   };
 }
 
@@ -38,7 +40,7 @@ export async function getWeather(
       "temperature_2m,precipitation_probability",
 
     daily:
-      "temperature_2m_max,temperature_2m_min,weather_code",
+      "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset",
 
     timezone: "auto",
 

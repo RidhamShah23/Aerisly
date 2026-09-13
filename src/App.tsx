@@ -88,6 +88,8 @@ function App() {
   humidity: 55,
   windSpeed: 12,
   uvIndex: 6,
+  sunrise: "06:00",
+sunset: "18:30",
 });
 const [forecast, setForecast] = useState<ForecastDay[]>([]);
 const theme = weatherThemes[weather.condition];

@@ -24,6 +24,8 @@ export interface CurrentWeather {
   humidity: number;
   windSpeed: number;
   uvIndex: number;
+  sunrise: string;
+  sunset: string;
 }
 export interface ForecastDay{
   day: string;
