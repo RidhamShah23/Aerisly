@@ -1,10 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {
-  Thermometer,
-  Wind,
-  Bell,
-} from "@phosphor-icons/react";
-
+import { Thermometer, Wind, Bell } from "@phosphor-icons/react";
 import type { WeatherTheme } from "../types/weather";
 
 interface SettingsPageProps {
@@ -13,13 +9,9 @@ interface SettingsPageProps {
   temperatureUnit: "C" | "F";
   windUnit: "km/h" | "mph";
 
-  onTemperatureUnitChange: (
-    unit: "C" | "F"
-  ) => void;
+  onTemperatureUnitChange: (unit: "C" | "F") => void;
 
-  onWindUnitChange: (
-    unit: "km/h" | "mph"
-  ) => void;
+  onWindUnitChange: (unit: "km/h" | "mph") => void;
 }
 
 function SettingsPage({
@@ -29,19 +21,22 @@ function SettingsPage({
   onTemperatureUnitChange,
   onWindUnitChange,
 }: SettingsPageProps) {
-
-  const [weatherAlerts, setWeatherAlerts] =
-    useState(true);
+  const navigate = useNavigate();
+  const [weatherAlerts, setWeatherAlerts] = useState(true);
 
   return (
     <div className="mt-8 max-w-3xl">
-
+      <button
+  onClick={() => navigate("/")}
+  className="mb-4 p-1.5 bg-blue-900 border-2 hover:bg-yellow-400 transition-colors rounded-2xl flex items-center gap-2 text-sm font-medium"
+  style={{ color: theme.text }}
+>
+  ← Back to Dashboard
+</button>
       {/* Header */}
 
       <div>
-        <h2 className="text-2xl font-semibold">
-          Settings
-        </h2>
+        <h2 className="text-2xl font-semibold">Settings</h2>
 
         <p
           className="mt-1 text-sm"
@@ -62,12 +57,10 @@ function SettingsPage({
         }}
       >
         <div className="flex items-center gap-4">
-
           <div
             className="flex h-11 w-11 items-center justify-center rounded-xl"
             style={{
-              backgroundColor:
-                `${theme.primary}20`,
+              backgroundColor: `${theme.primary}20`,
             }}
           >
             <Thermometer
@@ -80,9 +73,7 @@ function SettingsPage({
           </div>
 
           <div>
-            <h3 className="font-semibold">
-              Temperature Unit
-            </h3>
+            <h3 className="font-semibold">Temperature Unit</h3>
 
             <p
               className="text-sm"
@@ -93,51 +84,34 @@ function SettingsPage({
               Choose how temperature is displayed
             </p>
           </div>
-
         </div>
 
         <div className="mt-5 flex gap-3">
-
           <button
-           onClick={() =>
-  onTemperatureUnitChange("C")
-}
+            onClick={() => onTemperatureUnitChange("C")}
             className="rounded-xl px-5 py-3 text-sm font-medium"
             style={{
               backgroundColor:
-                temperatureUnit === "C"
-                  ? theme.primary
-                  : theme.background,
+                temperatureUnit === "C" ? theme.primary : theme.background,
 
-              color:
-                temperatureUnit === "C"
-                  ? "#ffffff"
-                  : theme.text,
+              color: temperatureUnit === "C" ? "#ffffff" : theme.text,
             }}
           >
             Celsius °C
           </button>
 
           <button
-            onClick={() =>
-  onTemperatureUnitChange("F")
-}
+            onClick={() => onTemperatureUnitChange("F")}
             className="rounded-xl px-5 py-3 text-sm font-medium"
             style={{
               backgroundColor:
-                temperatureUnit === "F"
-                  ? theme.primary
-                  : theme.background,
+                temperatureUnit === "F" ? theme.primary : theme.background,
 
-              color:
-                temperatureUnit === "F"
-                  ? "#ffffff"
-                  : theme.text,
+              color: temperatureUnit === "F" ? "#ffffff" : theme.text,
             }}
           >
             Fahrenheit °F
           </button>
-
         </div>
       </div>
 
@@ -150,12 +124,10 @@ function SettingsPage({
         }}
       >
         <div className="flex items-center gap-4">
-
           <div
             className="flex h-11 w-11 items-center justify-center rounded-xl"
             style={{
-              backgroundColor:
-                `${theme.primary}20`,
+              backgroundColor: `${theme.primary}20`,
             }}
           >
             <Wind
@@ -168,9 +140,7 @@ function SettingsPage({
           </div>
 
           <div>
-            <h3 className="font-semibold">
-              Wind Speed Unit
-            </h3>
+            <h3 className="font-semibold">Wind Speed Unit</h3>
 
             <p
               className="text-sm"
@@ -181,51 +151,34 @@ function SettingsPage({
               Choose your preferred wind speed unit
             </p>
           </div>
-
         </div>
 
         <div className="mt-5 flex gap-3">
-
           <button
-            onClick={() =>
-                 onWindUnitChange("km/h")
-                }
+            onClick={() => onWindUnitChange("km/h")}
             className="rounded-xl px-5 py-3 text-sm font-medium"
             style={{
               backgroundColor:
-                windUnit === "km/h"
-                  ? theme.primary
-                  : theme.background,
+                windUnit === "km/h" ? theme.primary : theme.background,
 
-              color:
-                windUnit === "km/h"
-                  ? "#ffffff"
-                  : theme.text,
+              color: windUnit === "km/h" ? "#ffffff" : theme.text,
             }}
           >
             km/h
           </button>
 
           <button
-           onClick={() =>
-  onWindUnitChange("mph")
-}
+            onClick={() => onWindUnitChange("mph")}
             className="rounded-xl px-5 py-3 text-sm font-medium"
             style={{
               backgroundColor:
-                windUnit === "mph"
-                  ? theme.primary
-                  : theme.background,
+                windUnit === "mph" ? theme.primary : theme.background,
 
-              color:
-                windUnit === "mph"
-                  ? "#ffffff"
-                  : theme.text,
+              color: windUnit === "mph" ? "#ffffff" : theme.text,
             }}
           >
             mph
           </button>
-
         </div>
       </div>
 
@@ -237,14 +190,11 @@ function SettingsPage({
           backgroundColor: theme.card,
         }}
       >
-
         <div className="flex items-center gap-4">
-
           <div
             className="flex h-11 w-11 items-center justify-center rounded-xl"
             style={{
-              backgroundColor:
-                `${theme.primary}20`,
+              backgroundColor: `${theme.primary}20`,
             }}
           >
             <Bell
@@ -257,9 +207,7 @@ function SettingsPage({
           </div>
 
           <div>
-            <h3 className="font-semibold">
-              Weather Alerts
-            </h3>
+            <h3 className="font-semibold">Weather Alerts</h3>
 
             <p
               className="text-sm"
@@ -270,33 +218,23 @@ function SettingsPage({
               Receive important weather notifications
             </p>
           </div>
-
         </div>
 
         <button
-          onClick={() =>
-            setWeatherAlerts(!weatherAlerts)
-          }
+          onClick={() => setWeatherAlerts(!weatherAlerts)}
           className="relative h-7 w-12 rounded-full transition"
           style={{
-            backgroundColor:
-              weatherAlerts
-                ? theme.primary
-                : theme.mutedText,
+            backgroundColor: weatherAlerts ? theme.primary : theme.mutedText,
           }}
         >
           <span
             className="absolute top-1 h-5 w-5 rounded-full bg-white transition"
             style={{
-              left: weatherAlerts
-                ? "26px"
-                : "4px",
+              left: weatherAlerts ? "26px" : "4px",
             }}
           />
         </button>
-
       </div>
-
     </div>
   );
 }

@@ -41,16 +41,13 @@ function ForecastCard({
 
   return (
     <div
-className="flex min-w-36 flex-col items-center rounded-2xl p-5 shadow-sm transition-colors duration-500 sm:min-w-0"
+      className="flex min-w-36 flex-col items-center rounded-2xl p-5 shadow-sm transition-colors duration-500 sm:min-w-0"
       style={{
         backgroundColor: theme.card,
         color: theme.text,
       }}
     >
-      <p
-        className="text-sm font-medium"
-        style={{ color: theme.mutedText }}
-      >
+      <p className="text-sm font-medium" style={{ color: theme.mutedText }}>
         {forecast.day}
       </p>
 
@@ -62,13 +59,10 @@ className="flex min-w-36 flex-col items-center rounded-2xl p-5 shadow-sm transit
       />
 
       <p className="text-xl font-semibold">
-       {displayTemperature(forecast.high)}°
+        {displayTemperature(forecast.high)}°
       </p>
 
-      <p
-        className="mt-1 text-sm"
-        style={{ color: theme.mutedText }}
-      >
+      <p className="mt-1 text-sm" style={{ color: theme.mutedText }}>
         {displayTemperature(forecast.low)}°
       </p>
     </div>

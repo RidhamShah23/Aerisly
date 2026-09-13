@@ -1,27 +1,15 @@
-import {
-  MapPin,
-  Trash,
-} from "@phosphor-icons/react";
-
-import type {
-  LocationResult,
-} from "../services/geocodingApi";
-
-import type {
-  WeatherTheme,
-} from "../types/weather";
+import { useNavigate } from "react-router-dom";
+import { MapPin, Trash } from "@phosphor-icons/react";
+import type { LocationResult } from "../services/geocodingApi";
+import type { WeatherTheme } from "../types/weather";
 
 interface LocationsPageProps {
   locations: LocationResult[];
   theme: WeatherTheme;
 
-  onSelectLocation: (
-    location: LocationResult
-  ) => void;
+  onSelectLocation: (location: LocationResult) => void;
 
-  onRemoveLocation: (
-    location: LocationResult
-  ) => void;
+  onRemoveLocation: (location: LocationResult) => void;
 }
 
 function LocationsPage({
@@ -30,15 +18,21 @@ function LocationsPage({
   onSelectLocation,
   onRemoveLocation,
 }: LocationsPageProps) {
+  const navigate = useNavigate();
   return (
     <div className="mt-8">
+      <button
+  onClick={() => navigate("/")}
+  className="mb-4 p-1.5 bg-blue-900 border-2 rounded-2xl hover:bg-yellow-400 transition-colors flex items-center gap-2 text-sm font-medium"
+  style={{ color: theme.text }}
+>
+  ← Back to Dashboard
+</button>
       {/* Header */}
 
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">
-            Saved Locations
-          </h2>
+          <h2 className="text-2xl font-semibold">Saved Locations</h2>
 
           <p
             className="mt-1 text-sm"
@@ -76,9 +70,7 @@ function LocationsPage({
             }}
           />
 
-          <h3 className="mt-4 text-lg font-semibold">
-            No saved locations
-          </h3>
+          <h3 className="mt-4 text-lg font-semibold">No saved locations</h3>
 
           <p
             className="mt-2 text-sm"
@@ -118,9 +110,7 @@ function LocationsPage({
               style={{
                 backgroundColor: theme.card,
               }}
-              onClick={() =>
-                onSelectLocation(location)
-              }
+              onClick={() => onSelectLocation(location)}
             >
               <MapPin
                 size={28}
@@ -130,9 +120,7 @@ function LocationsPage({
                 }}
               />
 
-              <h3 className="mt-4 text-lg font-semibold">
-                {location.name}
-              </h3>
+              <h3 className="mt-4 text-lg font-semibold">{location.name}</h3>
 
               <p
                 className="mt-1 text-sm"
@@ -140,9 +128,7 @@ function LocationsPage({
                   color: theme.mutedText,
                 }}
               >
-                {location.admin1
-                  ? `${location.admin1}, `
-                  : ""}
+                {location.admin1 ? `${location.admin1}, ` : ""}
                 {location.country}
               </p>
 
@@ -152,9 +138,7 @@ function LocationsPage({
                 onClick={(event) => {
                   event.stopPropagation();
 
-                  onRemoveLocation(
-                    location
-                  );
+                  onRemoveLocation(location);
                 }}
                 className="
                   absolute
