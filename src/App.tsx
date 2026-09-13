@@ -1,3 +1,9 @@
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 import Header from "./components/Header";
 import CurrentWeather from "./components/CurrentWeather";
 import { useEffect, useState } from "react";
@@ -72,6 +78,8 @@ const activities: Activity[] = [
 ];
 
 function App() {
+  const navigate = useNavigate();
+
   const [weather,setWeather]= useState<CurrentWeatherType>({
   city: "Ahmedabad",
   temperature: 32,
@@ -83,7 +91,6 @@ function App() {
 });
 const [forecast, setForecast] = useState<ForecastDay[]>([]);
 const theme = weatherThemes[weather.condition];
-const [activePage, setActivePage] = useState("Dashboard");
 const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>([]);
 
 const activityWeather = {
@@ -239,10 +246,8 @@ const saveLocation = (
     const alreadyExists =
       previousLocations.some(
         (savedLocation) =>
-          savedLocation.latitude ===
-            location.latitude &&
-          savedLocation.longitude ===
-            location.longitude
+          savedLocation.latitude === location.latitude &&
+          savedLocation.longitude === location.longitude
       );
 
     if (alreadyExists) {
@@ -261,10 +266,8 @@ const removeLocation = (
   setSavedLocations((previousLocations) =>
     previousLocations.filter(
       (savedLocation) =>
-        savedLocation.latitude !==
-          location.latitude ||
-        savedLocation.longitude !==
-          location.longitude
+        savedLocation.latitude !== location.latitude ||
+        savedLocation.longitude !== location.longitude
     )
   );
 };
@@ -298,9 +301,7 @@ const handleCitySelect = async (
 const [temperatureUnit, setTemperatureUnit] =
   useState<"C" | "F">(() => {
     return (
-      (localStorage.getItem(
-        "temperatureUnit"
-      ) as "C" | "F") || "C"
+      (localStorage.getItem("temperatureUnit") as "C" | "F") || "C"
     );
   });
 
@@ -361,15 +362,15 @@ const displayWindSpeed = (
   theme={theme}
   onCitySelect={handleCitySelect}
   onCurrentLocation={handleCurrentLocation}
-  onOpenLocations={() =>
-    setActivePage("Locations")
+  onOpenLocations={() => navigate("/locations")
   }
-  onOpenSettings={() =>
-    setActivePage("Settings")
+  onOpenSettings={() => navigate("/settings")
   }
 />
-
-{activePage === "Dashboard" && (
+<Routes>
+<Route
+  path="/"
+  element={
   <div>
 {isLoading ? (
   <WeatherSkeleton theme={theme} />
@@ -502,8 +503,12 @@ const displayWindSpeed = (
 
 
   </div>
-)}
-{activePage === "Locations" && (
+}
+/>
+
+<Route
+  path="/locations"
+  element={
   
   <div className="mt-8">
     <LocationsPage
@@ -511,31 +516,40 @@ const displayWindSpeed = (
     theme={theme}
     onSelectLocation={async (location) => {
       await handleCitySelect(location);
-      setActivePage("Dashboard");
+      navigate("/");
     }}
     onRemoveLocation={removeLocation}
   />
     
   </div>
-)}
+}
+/>
 
-{activePage === "Settings" && (
+<Route
+  path="/settings"
+  element={
   <SettingsPage
   theme={theme}
   temperatureUnit={temperatureUnit}
   windUnit={windUnit}
-  onTemperatureUnitChange={
-    setTemperatureUnit
-  }
+  onTemperatureUnitChange={setTemperatureUnit}
   onWindUnitChange={setWindUnit}
 />
-)}
-
+}
+/>
+</Routes>
       </main>
     </div>
   );
 }
 
 
+function AppWithRouter() {
+  return (
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  );
+}
 
-export default App;
+export default AppWithRouter;
