@@ -110,15 +110,7 @@ function AirQuality({
     >
       {airQuality.aqi}
     </p>
-
-    <p
-  className="mt-1 text-sm font-medium"
-  style={{
-    color: theme.primary,
-  }}
->
-  Indian AQI
-</p>
+    
   </div>
 
   <div className="text-right">

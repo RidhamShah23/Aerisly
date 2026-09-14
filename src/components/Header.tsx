@@ -72,6 +72,23 @@ function Header({
     setResults([]);
   }
 };
+const getGreeting = () => {
+  const hour = new Date().getHours();
+
+  if (hour >= 5 && hour < 12) {
+    return "Good morning";
+  }
+
+  if (hour >= 12 && hour < 17) {
+    return "Good afternoon";
+  }
+
+  if (hour >= 17 && hour < 21) {
+    return "Good evening";
+  }
+
+  return "Good night";
+};
 
   return (
     <header className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
@@ -81,7 +98,7 @@ function Header({
           className="text-sm"
           style={{ color: theme.mutedText }}
         >
-          Good evening
+{getGreeting()}
         </p>
 
         <h2
