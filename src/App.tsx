@@ -18,7 +18,6 @@ import NotFoundPage from "./pages/NotFoundPage";
 import { activities } from "./constants/activities";
 import useWeather from "./hooks/useWeather";
 
-
 function getUVLevel(uvIndex: number) {
   if (uvIndex <= 2) return "Low";
   if (uvIndex <= 5) return "Moderate";
@@ -26,17 +25,22 @@ function getUVLevel(uvIndex: number) {
   if (uvIndex <= 10) return "Very High";
   return "Extreme";
 }
+
+type SavedLocation = LocationResult & {
+  savedAt: number;
+};
+
 function App() {
   const navigate = useNavigate();
   const {
-  weather,
-  forecast,
-  hourlyWeather,
-  airQuality,
-  isLoading,
-  error,
-  loadWeatherForLocation,
-} = useWeather();
+    weather,
+    forecast,
+    hourlyWeather,
+    airQuality,
+    isLoading,
+    error,
+    loadWeatherForLocation,
+  } = useWeather();
 
   const activityWeather = {
     temperature: weather.temperature,
@@ -53,11 +57,10 @@ function App() {
     ...activity,
     score: calculateActivityScore(activity, activityWeather),
   }));
-const theme = weatherThemes[weather.condition];
+  const theme = weatherThemes[weather.condition];
 
   const handleCurrentLocation = async () => {
     try {
-     
       const coordinates = await getCurrentLocation();
 
       const location = await getCityFromCoordinates(
@@ -83,13 +86,23 @@ const theme = weatherThemes[weather.condition];
       console.error("Location weather failed:", error);
     }
   };
-  
-  const [savedLocations, setSavedLocations] = useState<LocationResult[]>(() => {
-    const saved = localStorage.getItem("savedLocations");
 
-    return saved ? JSON.parse(saved) : [];
-  });
+const [savedLocations, setSavedLocations] = useState<SavedLocation[]>(() => {
+  const saved = localStorage.getItem("savedLocations");
 
+  if (!saved) {
+    return [];
+  }
+
+  const locations: SavedLocation[] = JSON.parse(saved);
+  const fifteenDays = 15 * 24 * 60 * 60 * 1000;
+
+  return locations.filter(
+  (location) =>
+    location.savedAt &&
+    Date.now() - location.savedAt < fifteenDays,
+);
+});
   useEffect(() => {
     localStorage.setItem("savedLocations", JSON.stringify(savedLocations));
   }, [savedLocations]);
@@ -106,7 +119,13 @@ const theme = weatherThemes[weather.condition];
         return previousLocations;
       }
 
-      return [...previousLocations, location];
+      return [
+  ...previousLocations,
+  {
+    ...location,
+    savedAt: Date.now(),
+  },
+];
     });
   };
   const removeLocation = (location: LocationResult) => {
@@ -119,17 +138,13 @@ const theme = weatherThemes[weather.condition];
     );
   };
   const handleCitySelect = async (location: LocationResult) => {
-    try {
-      saveLocation(location);
+    saveLocation(location);
 
-      await loadWeatherForLocation(
-        location.latitude,
-        location.longitude,
-        location.name,
-      );
-    } catch (error) {
-      console.error("City selection failed:", error);
-    }
+    await loadWeatherForLocation(
+      location.latitude,
+      location.longitude,
+      location.name,
+    );
   };
 
   const [temperatureUnit, setTemperatureUnit] = useState<"C" | "F">(() => {
@@ -179,41 +194,39 @@ const theme = weatherThemes[weather.condition];
         />
         <Routes>
           <Route
-  path="/"
-  element={
-    <Dashboard
-      weather={weather}
-      theme={theme}
-      forecast={forecast}
-      hourlyWeather={hourlyWeather}
-      airQuality={airQuality}
-      scoredActivities={scoredActivities}
-      isLoading={isLoading}
-      error={error}
-      windUnit={windUnit}
-      temperatureUnit={temperatureUnit}
-      displayTemperature={displayTemperature}
-      displayWindSpeed={displayWindSpeed}
-      displayVisibility={displayVisibility}
-      getUVLevel={getUVLevel}
-    />
-  }
-/>
+            path="/"
+            element={
+              <Dashboard
+                weather={weather}
+                theme={theme}
+                forecast={forecast}
+                hourlyWeather={hourlyWeather}
+                airQuality={airQuality}
+                scoredActivities={scoredActivities}
+                isLoading={isLoading}
+                error={error}
+                windUnit={windUnit}
+                temperatureUnit={temperatureUnit}
+                displayTemperature={displayTemperature}
+                displayWindSpeed={displayWindSpeed}
+                displayVisibility={displayVisibility}
+                getUVLevel={getUVLevel}
+              />
+            }
+          />
 
           <Route
             path="/locations"
             element={
-              <div className="mt-8">
-                <LocationsPage
-                  locations={savedLocations}
-                  theme={theme}
-                  onSelectLocation={async (location) => {
-                    await handleCitySelect(location);
-                    navigate("/");
-                  }}
-                  onRemoveLocation={removeLocation}
-                />
-              </div>
+              <LocationsPage
+                locations={savedLocations}
+                theme={theme}
+                onSelectLocation={async (location) => {
+                  await handleCitySelect(location);
+                  navigate("/");
+                }}
+                onRemoveLocation={removeLocation}
+              />
             }
           />
 

@@ -43,14 +43,6 @@ function LocationsPage({
             Quickly switch between your saved cities
           </p>
         </div>
-
-        <MapPin
-          size={32}
-          strokeWidth={1.8}
-          style={{
-            color: theme.primary,
-          }}
-        />
       </div>
 
       {/* Empty State */}

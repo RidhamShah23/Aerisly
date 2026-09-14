@@ -35,7 +35,7 @@ function useWeather() {
   const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>([]);
   const [airQuality, setAirQuality] = useState<AirQualityType | null>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
+const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const loadWeatherForLocation = useCallback(
@@ -48,8 +48,6 @@ function useWeather() {
 ) => {
     
   try {
-    setIsLoading(true);
-    setError(null);
     
 
     const [weatherData, airQualityData] = await Promise.all([
