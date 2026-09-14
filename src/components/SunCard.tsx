@@ -72,28 +72,30 @@ export default function SunCard({ weather, theme }: SunCardProps) {
       </div>
 
       {/* Sun Area */}
-      <div className="relative mt-4 h-30">
-        {/* Arc */}
-        <div
-          className="absolute bottom-0 left-1/2 h-28 w-60 -translate-x-1/2 rounded-t-full border-2"
-          style={{
-            borderColor: theme.text,
-            opacity: 0.15,
-            borderBottom: "none",
-          }}
-        />
+  {daytime && (
+  <>
+    {/* Arc */}
+    <div
+      className="absolute bottom-0 left-1/2 h-28 w-60 -translate-x-1/2 rounded-t-full border-2"
+      style={{
+        borderColor: theme.text,
+        opacity: 0.15,
+        borderBottom: "none",
+      }}
+    />
 
-        {/* Sun */}
-        <div
-          className="absolute h-5 w-5 rounded-full"
-          style={{
-            left: `calc(50% - 160px + ${sunProgress * 320}px)`,
-            top: `${100 - Math.sin(sunProgress * Math.PI) * 100}%`,
-            backgroundColor: theme.text,
-            transform: "translate(-50%, -50%)",
-          }}
-        />
-      </div>
+    {/* Sun */}
+    <div
+      className="absolute h-5 w-5 rounded-full"
+      style={{
+        left: `calc(50% - 160px + ${sunProgress * 320}px)`,
+        top: `${100 - Math.sin(sunProgress * Math.PI) * 100}%`,
+        backgroundColor: theme.text,
+        transform: "translate(-50%, -50%)",
+      }}
+    />
+  </>
+)}
 
       {/* Sunrise / Sunset */}
       <div className="mt-4 grid grid-cols-2 gap-4">
