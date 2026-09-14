@@ -23,3 +23,6 @@ dist-ssr
 *.sw?
 vite.config.*.timestamp-*
 !.vscode/settings.json
+.env
+.env*
+!.env.example
