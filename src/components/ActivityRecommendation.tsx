@@ -1,11 +1,12 @@
 import {
   ShoppingBag,
-  PersonSimpleWalk,
-  Toolbox,
-  PicnicTable,
-} from "@phosphor-icons/react";
+  Footprints,
+  Wrench,
+  Utensils,
+} from "lucide-react";
 
-import type { Icon } from "@phosphor-icons/react";
+
+import type { LucideIcon } from "lucide-react";
 import type { Activity, WeatherTheme } from "../types/weather";
 
 interface ActivityRecommendationProps {
@@ -13,11 +14,11 @@ interface ActivityRecommendationProps {
   theme: WeatherTheme;
 }
 
-const activityIcons: Record<string, Icon> = {
+const activityIcons: Record<string, LucideIcon> = {
   Shopping: ShoppingBag,
-  Walking: PersonSimpleWalk,
-  "Outdoor Work": Toolbox,
-  Picnic: PicnicTable,
+  Walking: Footprints,
+  "Outdoor Work": Wrench,
+  Picnic: Utensils,
 };
 
 function getScoreLabel(score: number): string {
@@ -62,11 +63,11 @@ function ActivityRecommendation({
                 backgroundColor: theme.background,
               }}
             >
-              <ActivityIcon
-                size={28}
-                weight="duotone"
-                style={{ color: theme.primary }}
-              />
+             <ActivityIcon
+  size={28}
+  strokeWidth={1.8}
+  style={{ color: theme.primary }}
+/>
 
               <div className="flex-1">
                 <p className="font-medium">

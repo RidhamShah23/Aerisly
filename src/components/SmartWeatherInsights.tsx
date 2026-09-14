@@ -1,11 +1,11 @@
 import {
   CloudRain,
-  Drop,
+  Droplets,
   Thermometer,
   Sun,
   Wind,
   Cloud,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import type {ElementType} from "react";
 import type {
   CurrentWeather,
@@ -60,7 +60,7 @@ if (weather.humidity >= 80) {
     title: "High humidity",
     description:
       `Humidity is currently ${weather.humidity}%. The air may feel uncomfortable.`,
-    icon: Drop,
+    icon: Droplets,
   });
 }
 
@@ -217,7 +217,7 @@ const visibleInsights =
                 >
                   <Icon
                     size={22}
-                    weight="duotone"
+                     strokeWidth={1.8}
                     style={{
                       color:
                         theme.primary,

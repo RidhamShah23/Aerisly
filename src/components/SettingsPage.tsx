@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Thermometer, Wind } from "@phosphor-icons/react";
+import { Thermometer, Wind } from "lucide-react";
 import type { WeatherTheme } from "../types/weather";
 
 interface SettingsPageProps {
@@ -63,7 +63,7 @@ function SettingsPage({
           >
             <Thermometer
               size={24}
-              weight="duotone"
+              strokeWidth={1.8}
               style={{
                 color: theme.primary,
               }}
@@ -130,7 +130,7 @@ function SettingsPage({
           >
             <Wind
               size={24}
-              weight="duotone"
+              strokeWidth={1.8}
               style={{
                 color: theme.primary,
               }}

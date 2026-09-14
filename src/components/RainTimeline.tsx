@@ -1,4 +1,4 @@
-import { Umbrella } from "@phosphor-icons/react";
+import { Umbrella } from "lucide-react";
 
 import type {
   RainForecast,
@@ -32,7 +32,7 @@ function RainTimeline({
             color: theme.primary,
           }}
         >
-          <Umbrella size={22} weight="duotone" />
+          <Umbrella size={22} strokeWidth={1.8} />
         </div>
 
         <div>

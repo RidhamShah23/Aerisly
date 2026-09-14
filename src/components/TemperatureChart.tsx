@@ -17,7 +17,7 @@ import { Line } from "react-chartjs-2";
 
 import {
   CloudRain,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 
 import {
   useEffect,
@@ -353,7 +353,7 @@ callback: (
 
                   <CloudRain
                     size={22}
-                    weight="duotone"
+                     strokeWidth={1.8}
                     style={{
                       color: theme.primary,
                     }}
