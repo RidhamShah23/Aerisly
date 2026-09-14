@@ -1,28 +1,13 @@
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import { useEffect, useState } from "react";
-import { weatherThemes } from "./themes/weatherThemes";
 import Dashboard from "./components/Dashboard";
-import type {
-  CurrentWeather as CurrentWeatherType,
-  ForecastDay,
-  Activity,
-  AirQuality as AirQualityType,
-  HourlyWeather,
-} from "./types/weather";
+import { weatherThemes } from "./themes/weatherThemes";
 
 import { calculateActivityScore } from "./utils/activityUtils";
 
 import type { LocationResult } from "./services/geocodingApi";
-import { getWeather } from "./services/weatherApi";
-import {
-  mapCurrentWeather,
-  mapForecast,
-  mapHourlyWeather,
-  mapAirQuality,
-} from "./utils/weatherUtils";
 
-import { getAirQuality } from "./services/airQualityApi";
 import {
   getCurrentLocation,
   getCityFromCoordinates,
@@ -30,29 +15,9 @@ import {
 import LocationsPage from "./components/LocationsPage";
 import SettingsPage from "./components/SettingsPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { activities } from "./constants/activities";
+import useWeather from "./hooks/useWeather";
 
-const activities: Activity[] = [
-  {
-    name: "Shopping",
-    type: "indoor",
-    score: 0,
-  },
-  {
-    name: "Walking",
-    type: "outdoor",
-    score: 0,
-  },
-  {
-    name: "Outdoor Work",
-    type: "outdoor",
-    score: 0,
-  },
-  {
-    name: "Picnic",
-    type: "outdoor",
-    score: 0,
-  },
-];
 
 function getUVLevel(uvIndex: number) {
   if (uvIndex <= 2) return "Low";
@@ -63,22 +28,15 @@ function getUVLevel(uvIndex: number) {
 }
 function App() {
   const navigate = useNavigate();
-
-  const [weather, setWeather] = useState<CurrentWeatherType>({
-    city: "Ahmedabad",
-    temperature: 32,
-    condition: "sunny",
-    feelsLike: 35,
-    humidity: 55,
-    windSpeed: 12,
-    uvIndex: 6,
-    visibility: 10000,
-    sunrise: "06:00",
-    sunset: "18:30",
-  });
-  const [forecast, setForecast] = useState<ForecastDay[]>([]);
-  const theme = weatherThemes[weather.condition];
-  const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>([]);
+  const {
+  weather,
+  forecast,
+  hourlyWeather,
+  airQuality,
+  isLoading,
+  error,
+  loadWeatherForLocation,
+} = useWeather();
 
   const activityWeather = {
     temperature: weather.temperature,
@@ -95,16 +53,11 @@ function App() {
     ...activity,
     score: calculateActivityScore(activity, activityWeather),
   }));
+const theme = weatherThemes[weather.condition];
 
-  const [airQuality, setAirQuality] = useState<AirQualityType | null>(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const handleCurrentLocation = async () => {
     try {
-      setIsLoading(true);
-      setError(null);
-
+     
       const coordinates = await getCurrentLocation();
 
       const location = await getCityFromCoordinates(
@@ -128,50 +81,9 @@ function App() {
       );
     } catch (error) {
       console.error("Location weather failed:", error);
-
-      setError("Couldn't determine your current location.");
-
-      setIsLoading(false);
     }
   };
-  const loadWeatherForLocation = async (
-    latitude: number,
-    longitude: number,
-    city: string,
-  ) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const [weatherData, airQualityData] = await Promise.all([
-        getWeather(latitude, longitude),
-        getAirQuality(latitude, longitude),
-      ]);
-
-      const currentWeather = mapCurrentWeather(weatherData, city);
-
-      const currentForecast = mapForecast(weatherData);
-
-      const currentHourly = mapHourlyWeather(weatherData);
-
-      const currentAirQuality = mapAirQuality(airQualityData);
-
-      setWeather(currentWeather);
-      setForecast(currentForecast);
-      setHourlyWeather(currentHourly);
-      setAirQuality(currentAirQuality);
-    } catch (error) {
-      console.error("Weather loading failed:", error);
-
-      setError("Couldn't load weather data. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  useEffect(() => {
-    loadWeatherForLocation(23.0225, 72.5714, "Ahmedabad");
-  }, []);
-
+  
   const [savedLocations, setSavedLocations] = useState<LocationResult[]>(() => {
     const saved = localStorage.getItem("savedLocations");
 
