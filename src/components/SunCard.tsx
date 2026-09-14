@@ -95,7 +95,7 @@ export default function SunCard({ weather, theme }: SunCardProps) {
       }}
     />
   </>
-)}
+)}  
 
       {/* Sunrise / Sunset */}
       <div className="mt-4 grid grid-cols-2 gap-4">
