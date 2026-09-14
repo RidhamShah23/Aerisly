@@ -40,6 +40,7 @@ import WeatherSkeleton from "./components/WeatherSkeleton";
 import LocationsPage from "./components/LocationsPage";
 import SettingsPage from "./components/SettingsPage";
 import SunCard from "./components/SunCard";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const activities: Activity[] = [
   {
@@ -304,8 +305,8 @@ function App() {
 
                       {/* Weather Stats */}
 
-<div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-                          <WeatherStatCard
+                      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+                        <WeatherStatCard
                           icon={Drop}
                           label="Humidity"
                           value={`${weather.humidity}%`}
@@ -329,12 +330,12 @@ function App() {
                           theme={theme}
                         />
                         <WeatherStatCard
-  icon={Eye}
-  label="Visibility"
-  value={`${displayVisibility} km`}
-  description="Clear view"
-  theme={theme}
-/>
+                          icon={Eye}
+                          label="Visibility"
+                          value={`${displayVisibility} km`}
+                          description="Clear view"
+                          theme={theme}
+                        />
                       </div>
 
                       {/* 5-Day Forecast */}
@@ -435,6 +436,7 @@ function App() {
               />
             }
           />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
     </div>
