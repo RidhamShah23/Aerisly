@@ -9,8 +9,12 @@ import type {
   ForecastDay,
   Activity,
 } from "./types/weather";
-import { Drop, Wind, Sun, Eye } from "@phosphor-icons/react";
-import WeatherStatCard from "./components/WeatherStatCard";
+import {
+  Droplets,
+  Wind,
+  Sun,
+  Eye,
+} from "lucide-react";import WeatherStatCard from "./components/WeatherStatCard";
 import ForecastCard from "./components/ForecastCard";
 import TemperatureChart from "./components/TemperatureChart";
 import { calculateActivityScore } from "./utils/activityUtils";
@@ -307,7 +311,7 @@ function App() {
 
                       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
                         <WeatherStatCard
-                          icon={Drop}
+                          icon={Droplets}
                           label="Humidity"
                           value={`${weather.humidity}%`}
                           description="Normal"
@@ -333,7 +337,7 @@ function App() {
                           icon={Eye}
                           label="Visibility"
                           value={`${displayVisibility} km`}
-                          description="Clear view"
+                          description=""
                           theme={theme}
                         />
                       </div>

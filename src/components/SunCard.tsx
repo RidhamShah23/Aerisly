@@ -70,10 +70,10 @@ export default function SunCard({ weather, theme }: SunCardProps) {
       </div>
 
       {/* Sun Area */}
-      <div className="relative mt-4 h-35">
+      <div className="relative mt-4 h-30">
         {/* Arc */}
         <div
-          className="absolute bottom-0 left-1/2 h-28 w-80 -translate-x-1/2 rounded-t-full border-2"
+          className="absolute bottom-0 left-1/2 h-28 w-60 -translate-x-1/2 rounded-t-full border-2"
           style={{
             borderColor: theme.text,
             opacity: 0.15,

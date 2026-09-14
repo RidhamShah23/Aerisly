@@ -6,10 +6,9 @@ import {
   Snowflake,
   CloudFog,
   Moon,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 
-import type { Icon } from "@phosphor-icons/react";
-
+import type { LucideIcon } from "lucide-react";
 import type {
   ForecastDay,
   WeatherCondition,
@@ -22,7 +21,7 @@ interface ForecastCardProps {
   displayTemperature: (temperature: number) => number;
 }
 
-const weatherIcons: Record<WeatherCondition, Icon> = {
+const weatherIcons: Record<WeatherCondition, LucideIcon> = {
   sunny: Sun,
   cloudy: Cloud,
   rainy: CloudRain,
@@ -53,7 +52,7 @@ function ForecastCard({
 
       <WeatherIcon
         size={42}
-        weight="duotone"
+        strokeWidth={1.8}
         className="my-4"
         style={{ color: theme.accent }}
       />

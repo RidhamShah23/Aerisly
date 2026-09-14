@@ -1,8 +1,8 @@
-import type { Icon } from "@phosphor-icons/react";
+import type { LucideIcon } from "lucide-react";
 import type { WeatherTheme } from "../types/weather";
 
 interface WeatherStatCardProps {
-  icon: Icon;
+  icon: LucideIcon;
   label: string;
   value: string;
   description: string;
@@ -31,7 +31,7 @@ function WeatherStatCard({
           color: theme.primary,
         }}
       >
-        <IconComponent size={22} weight="duotone" />
+<IconComponent size={22} strokeWidth={1.8} />
       </div>
 
       <p
