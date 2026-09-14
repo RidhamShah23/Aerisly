@@ -1,5 +1,8 @@
-import { Sun, SunHorizon } from "@phosphor-icons/react";
-
+import {
+  Sun,
+  Sunrise,
+  Sunset,
+} from "lucide-react";
 import type { CurrentWeather } from "../types/weather";
 import type { WeatherTheme } from "../types/weather";
 
@@ -63,8 +66,7 @@ export default function SunCard({ weather, theme }: SunCardProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Sun size={24} weight="fill" />
-
+<Sun size={24} strokeWidth={2} />
           <span className="text-2xl font-medium">{weather.temperature}°C</span>
         </div>
       </div>
@@ -96,8 +98,7 @@ export default function SunCard({ weather, theme }: SunCardProps) {
       {/* Sunrise / Sunset */}
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div className="flex items-center gap-3">
-          <SunHorizon size={28} />
-
+<Sunrise size={28} strokeWidth={1.8} />
           <div>
             <p className="text-xs" style={{ opacity: 0.6 }}>
               Sunrise
@@ -116,7 +117,7 @@ export default function SunCard({ weather, theme }: SunCardProps) {
             <p className="font-medium">{formatSunTime(weather.sunset)}</p>
           </div>
 
-          <SunHorizon size={28} />
+          <Sunset size={28} strokeWidth={1.8} />
         </div>
       </div>
     </div>

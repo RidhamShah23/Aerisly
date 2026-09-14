@@ -1,5 +1,4 @@
-import { Wind } from "@phosphor-icons/react";
-
+import { Wind } from "lucide-react";
 import type {
   AirQuality as AirQualityType,
   WeatherTheme,
@@ -81,7 +80,7 @@ function AirQuality({
             color: theme.primary,
           }}
         >
-          <Wind size={22} weight="duotone" />
+          <Wind size={22} strokeWidth={1.8} />
         </div>
 
         <div>
@@ -110,7 +109,7 @@ function AirQuality({
     >
       {airQuality.aqi}
     </p>
-    
+
   </div>
 
   <div className="text-right">

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { MapPin, Trash } from "@phosphor-icons/react";
+import { MapPin, Trash2 } from "lucide-react";
 import type { LocationResult } from "../services/geocodingApi";
 import type { WeatherTheme } from "../types/weather";
 
@@ -22,12 +22,12 @@ function LocationsPage({
   return (
     <div className="mt-8">
       <button
-  onClick={() => navigate("/")}
-  className="mb-4 p-1.5 bg-blue-900 border-2 rounded-2xl hover:bg-yellow-400 transition-colors flex items-center gap-2 text-sm font-medium"
-  style={{ color: theme.text }}
->
-  ← Back to Dashboard
-</button>
+        onClick={() => navigate("/")}
+        className="mb-4 p-1.5 bg-blue-900 border-2 rounded-2xl hover:bg-yellow-400 transition-colors flex items-center gap-2 text-sm font-medium"
+        style={{ color: theme.text }}
+      >
+        ← Back to Dashboard
+      </button>
       {/* Header */}
 
       <div className="flex items-center justify-between">
@@ -46,7 +46,7 @@ function LocationsPage({
 
         <MapPin
           size={32}
-          weight="duotone"
+          strokeWidth={1.8}
           style={{
             color: theme.primary,
           }}
@@ -64,7 +64,7 @@ function LocationsPage({
         >
           <MapPin
             size={40}
-            weight="duotone"
+            strokeWidth={1.8}
             style={{
               color: theme.primary,
             }}
@@ -114,7 +114,7 @@ function LocationsPage({
             >
               <MapPin
                 size={28}
-                weight="duotone"
+                strokeWidth={1.8}
                 style={{
                   color: theme.primary,
                 }}
@@ -151,8 +151,9 @@ function LocationsPage({
                 "
                 title="Remove location"
               >
-                <Trash
+                <Trash2
                   size={20}
+                  strokeWidth={1.8}
                   style={{
                     color: theme.mutedText,
                   }}

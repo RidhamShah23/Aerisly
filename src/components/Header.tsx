@@ -1,9 +1,10 @@
+import type { ChangeEvent } from "react";
 import { useEffect, useState } from "react";
-import type { ChangeEvent } from "react";import {
-  MagnifyingGlass,
+import {
+  Search,
   MapPin,
-  Gear,
-} from "@phosphor-icons/react";
+  Settings,
+} from "lucide-react";
 
 import type { WeatherTheme } from "../types/weather";
 import type { LocationResult } from "../services/geocodingApi";
@@ -124,12 +125,13 @@ const getGreeting = () => {
         borderColor: theme.mutedText,
       }}
     >
-      <MagnifyingGlass
-        size={20}
-        style={{
-          color: theme.mutedText,
-        }}
-      />
+      <Search
+  size={20}
+  strokeWidth={2}
+  style={{
+    color: theme.mutedText,
+  }}
+/>
 
       <input
         type="text"
@@ -173,12 +175,13 @@ const getGreeting = () => {
             }
             className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-black/5"
           >
-            <MapPin
-              size={18}
-              style={{
-                color: theme.primary,
-              }}
-            />
+           <MapPin
+  size={18}
+  strokeWidth={2}
+  style={{
+    color: theme.primary,
+  }}
+/>
 
             <div>
               <p
@@ -225,8 +228,7 @@ const getGreeting = () => {
         color: theme.text,
       }}
     >
-      <MapPin size={20} />
-
+      <MapPin size={20} strokeWidth={2} />
       <span className="text-sm">
         Current Location
       </span>
@@ -242,7 +244,7 @@ const getGreeting = () => {
   }}
   title="Saved Locations"
 >
-  <MapPin size={21} />
+  <MapPin size={21} strokeWidth={2} />
 </button>
 
 <button
@@ -255,7 +257,7 @@ const getGreeting = () => {
   }}
   title="Settings"
 >
-  <Gear size={21} />
+  <Settings size={21} strokeWidth={2} />
 </button>
 
   </div>

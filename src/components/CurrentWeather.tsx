@@ -6,7 +6,7 @@ import {
   CloudFog,
   Snowflake,
   MapPin,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 
 import type {
   CurrentWeather as CurrentWeatherType,
@@ -37,10 +37,7 @@ function CurrentWeather({
       {/* Location */}
 
       <div className="flex items-center gap-2">
-        <MapPin
-          size={20}
-          weight="fill"
-        />
+       <MapPin size={20} strokeWidth={2} />
 
         <span className="text-sm">
           {weather.city}
@@ -88,7 +85,6 @@ function CurrentWeather({
 </div>
 
       </div>
-
     </div>
   );
 }
@@ -102,18 +98,18 @@ function WeatherIcon({
   switch (condition) {
     case "sunny":
       return (
-        <Sun
-          size={100}
-          weight="duotone"
-          style={{ color }}
-        />
+       <Sun
+  size={100}
+  strokeWidth={1.8}
+  style={{ color }}
+/>
       );
 
     case "cloudy":
       return (
         <Cloud
           size={100}
-          weight="duotone"
+  strokeWidth={1.8}
           style={{ color }}
         />
       );
@@ -122,7 +118,7 @@ function WeatherIcon({
       return (
         <CloudRain
           size={100}
-          weight="duotone"
+  strokeWidth={1.8}
           style={{ color }}
         />
       );
@@ -131,7 +127,7 @@ function WeatherIcon({
       return (
         <CloudLightning
           size={100}
-          weight="duotone"
+  strokeWidth={1.8}
           style={{ color }}
         />
       );
@@ -140,7 +136,7 @@ function WeatherIcon({
       return (
         <CloudFog
           size={100}
-          weight="duotone"
+  strokeWidth={1.8}
           style={{ color }}
         />
       );
@@ -149,7 +145,7 @@ function WeatherIcon({
       return (
         <Snowflake
           size={100}
-          weight="duotone"
+  strokeWidth={1.8}
           style={{ color }}
         />
       );
@@ -158,7 +154,7 @@ function WeatherIcon({
       return (
         <Sun
           size={100}
-          weight="duotone"
+  strokeWidth={1.8}
           style={{ color }}
         />
       );
