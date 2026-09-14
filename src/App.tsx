@@ -1,32 +1,20 @@
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
-import CurrentWeather from "./components/CurrentWeather";
 import { useEffect, useState } from "react";
 import { weatherThemes } from "./themes/weatherThemes";
-
+import Dashboard from "./components/Dashboard";
 import type {
   CurrentWeather as CurrentWeatherType,
   ForecastDay,
   Activity,
+  AirQuality as AirQualityType,
+  HourlyWeather,
 } from "./types/weather";
-import {
-  Droplets,
-  Wind,
-  Sun,
-  Eye,
-} from "lucide-react";import WeatherStatCard from "./components/WeatherStatCard";
-import ForecastCard from "./components/ForecastCard";
-import TemperatureChart from "./components/TemperatureChart";
+
 import { calculateActivityScore } from "./utils/activityUtils";
-
-import ActivityRecommendation from "./components/ActivityRecommendation";
-import AirQuality from "./components/AirQuality";
-
-import type { AirQuality as AirQualityType } from "./types/weather";
 
 import type { LocationResult } from "./services/geocodingApi";
 import { getWeather } from "./services/weatherApi";
-import type { HourlyWeather } from "./types/weather";
 import {
   mapCurrentWeather,
   mapForecast,
@@ -39,11 +27,8 @@ import {
   getCurrentLocation,
   getCityFromCoordinates,
 } from "./services/location";
-import SmartWeatherInsights from "./components/SmartWeatherInsights";
-import WeatherSkeleton from "./components/WeatherSkeleton";
 import LocationsPage from "./components/LocationsPage";
 import SettingsPage from "./components/SettingsPage";
-import SunCard from "./components/SunCard";
 import NotFoundPage from "./pages/NotFoundPage";
 
 const activities: Activity[] = [
@@ -69,6 +54,13 @@ const activities: Activity[] = [
   },
 ];
 
+function getUVLevel(uvIndex: number) {
+  if (uvIndex <= 2) return "Low";
+  if (uvIndex <= 5) return "Moderate";
+  if (uvIndex <= 7) return "High";
+  if (uvIndex <= 10) return "Very High";
+  return "Extreme";
+}
 function App() {
   const navigate = useNavigate();
 
@@ -227,14 +219,7 @@ function App() {
       console.error("City selection failed:", error);
     }
   };
-  function getUVLevel(uvIndex: number) {
-    if (uvIndex <= 2) return "Low";
-    if (uvIndex <= 5) return "Moderate";
-    if (uvIndex <= 7) return "High";
-    if (uvIndex <= 10) return "Very High";
 
-    return "Extreme";
-  }
   const [temperatureUnit, setTemperatureUnit] = useState<"C" | "F">(() => {
     return (localStorage.getItem("temperatureUnit") as "C" | "F") || "C";
   });
@@ -282,134 +267,26 @@ function App() {
         />
         <Routes>
           <Route
-            path="/"
-            element={
-              <div>
-                {isLoading ? (
-                  <WeatherSkeleton theme={theme} />
-                ) : (
-                  <div className="mt-8">
-                    {error && (
-                      <div
-                        className="mt-6 rounded-2xl p-4 text-center text-sm"
-                        style={{
-                          backgroundColor: theme.card,
-                          color: theme.text,
-                        }}
-                      >
-                        ⚠️ {error}
-                      </div>
-                    )}
-                    <div className="mt-8">
-                      <CurrentWeather
-                        weather={weather}
-                        theme={theme}
-                        displayTemperature={displayTemperature}
-                      />
-
-                      {/* Weather Stats */}
-
-                      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-                        <WeatherStatCard
-                          icon={Droplets}
-                          label="Humidity"
-                          value={`${weather.humidity}%`}
-                          description="Normal"
-                          theme={theme}
-                        />
-
-                        <WeatherStatCard
-                          icon={Wind}
-                          label="Wind Speed"
-                          value={`${displayWindSpeed(weather.windSpeed)} ${windUnit}`}
-                          description="Moderate"
-                          theme={theme}
-                        />
-
-                        <WeatherStatCard
-                          icon={Sun}
-                          label="UV Index"
-                          value={String(weather.uvIndex)}
-                          description={getUVLevel(weather.uvIndex)}
-                          theme={theme}
-                        />
-                        <WeatherStatCard
-                          icon={Eye}
-                          label="Visibility"
-                          value={`${displayVisibility} km`}
-                          description=""
-                          theme={theme}
-                        />
-                      </div>
-
-                      {/* 5-Day Forecast */}
-
-                      <div className="mt-8">
-                        <h3
-                          className="mb-4 text-xl font-semibold"
-                          style={{
-                            color: theme.text,
-                          }}
-                        >
-                          5-Day Forecast
-                        </h3>
-
-                        <div className="flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-5 sm:overflow-visible">
-                          {forecast.map((day) => (
-                            <ForecastCard
-                              key={day.day}
-                              forecast={day}
-                              theme={theme}
-                              displayTemperature={displayTemperature}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Temperature Chart */}
-
-                      <div className="mt-8">
-                        <TemperatureChart
-                          theme={theme}
-                          hourlyWeather={hourlyWeather}
-                          displayTemperature={displayTemperature}
-                          temperatureUnit={temperatureUnit}
-                        />
-                      </div>
-                      {/* Sun & Daylight */}
-
-                      <div className="mt-8">
-                        <SunCard weather={weather} theme={theme} />
-                      </div>
-
-                      {/* Activity Recommendation */}
-
-                      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.25fr]">
-                        <ActivityRecommendation
-                          activities={scoredActivities}
-                          theme={theme}
-                        />
-
-                        <SmartWeatherInsights
-                          weather={weather}
-                          hourlyWeather={hourlyWeather}
-                          theme={theme}
-                        />
-                      </div>
-
-                      {/* Air Quality */}
-
-                      <div className="mt-8">
-                        {airQuality && (
-                          <AirQuality airQuality={airQuality} theme={theme} />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            }
-          />
+  path="/"
+  element={
+    <Dashboard
+      weather={weather}
+      theme={theme}
+      forecast={forecast}
+      hourlyWeather={hourlyWeather}
+      airQuality={airQuality}
+      scoredActivities={scoredActivities}
+      isLoading={isLoading}
+      error={error}
+      windUnit={windUnit}
+      temperatureUnit={temperatureUnit}
+      displayTemperature={displayTemperature}
+      displayWindSpeed={displayWindSpeed}
+      displayVisibility={displayVisibility}
+      getUVLevel={getUVLevel}
+    />
+  }
+/>
 
           <Route
             path="/locations"
