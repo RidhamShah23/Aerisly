@@ -6,7 +6,6 @@ import ActivityRecommendation from "./ActivityRecommendation";
 import AirQuality from "./AirQuality";
 import SmartWeatherInsights from "./SmartWeatherInsights";
 import WeatherSkeleton from "./WeatherSkeleton";
-import SunCard from "./SunCard";
 
 import { Droplets, Wind, Sun, Eye } from "lucide-react";
 import type {
@@ -160,11 +159,6 @@ function Dashboard({
                 displayTemperature={displayTemperature}
                 temperatureUnit={temperatureUnit}
               />
-            </div>
-            {/* Sun & Daylight */}
-
-            <div className="mt-8">
-              <SunCard weather={weather} theme={theme} />
             </div>
 
             {/* Activity Recommendation */}

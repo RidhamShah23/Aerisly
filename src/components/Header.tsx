@@ -12,6 +12,7 @@ import { searchCity } from "../services/geocodingApi";
 
 interface HeaderProps {
   theme: WeatherTheme;
+  timezone: string;
 
   onCitySelect: (
     location: LocationResult
@@ -24,6 +25,7 @@ interface HeaderProps {
 }
 
 function Header({
+  timezone,
   theme,
   onCitySelect,
   onCurrentLocation,
@@ -74,23 +76,29 @@ function Header({
   }
 };
 const getGreeting = () => {
-  const hour = new Date().getHours();
+  
+  const locationTime = new Intl.DateTimeFormat("en-US", {
+    timeZone: timezone,
+    hour: "numeric",
+    hour12: false,
+  }).format(new Date());
+
+  const hour = Number(locationTime);
 
   if (hour >= 5 && hour < 12) {
-    return "Good morning";
+    return "Good Morning";
   }
 
   if (hour >= 12 && hour < 17) {
-    return "Good afternoon";
+    return "Good Afternoon";
   }
 
   if (hour >= 17 && hour < 21) {
-    return "Good evening";
+    return "Good Evening";
   }
 
-  return "Good night";
+  return "Good Night";
 };
-
   return (
     <header className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
       {/* Greeting */}

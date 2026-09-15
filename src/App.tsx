@@ -231,6 +231,7 @@ function App() {
       <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
         <Header
           theme={theme}
+          timezone={weather.timezone}
           onCitySelect={handleCitySelect}
           onCurrentLocation={handleCurrentLocation}
           onOpenLocations={() => navigate("/locations")}
