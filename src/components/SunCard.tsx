@@ -1,8 +1,4 @@
-import {
-  Sun,
-  Sunrise,
-  Sunset,
-} from "lucide-react";
+import { Sun, Sunrise, Sunset } from "lucide-react";
 import type { CurrentWeather } from "../types/weather";
 import type { WeatherTheme } from "../types/weather";
 
@@ -46,7 +42,7 @@ export default function SunCard({ weather, theme }: SunCardProps) {
   const daytime = isDaytime(weather.sunrise, weather.sunset);
   return (
     <div
-      className="overflow-hidden rounded-3xl p-6"
+      className="relative overflow-hidden rounded-3xl p-6 animate-fade-in-up"
       style={{
         backgroundColor: theme.card,
         color: theme.text,
@@ -66,41 +62,43 @@ export default function SunCard({ weather, theme }: SunCardProps) {
         </div>
 
         <div className="flex items-center gap-2">
-<Sun size={24} strokeWidth={2} />
+          <Sun size={24} strokeWidth={2} />
           <span className="text-2xl font-medium">{weather.temperature}°C</span>
         </div>
       </div>
 
       {/* Sun Area */}
-  {daytime && (
-  <>
-    {/* Arc */}
-    <div
-      className="absolute bottom-0 left-1/2 h-28 w-60 -translate-x-1/2 rounded-t-full border-2"
-      style={{
-        borderColor: theme.text,
-        opacity: 0.15,
-        borderBottom: "none",
-      }}
-    />
+      {/* Sun Area */}
+      <div className="relative mt-4 h-28">
+        {daytime && (
+          <>
+            {/* Arc */}
+            <div
+              className="absolute bottom-0 left-1/2 h-28 w-60 -translate-x-1/2 rounded-t-full border-2"
+              style={{
+                borderColor: theme.text,
+                opacity: 0.15,
+                borderBottom: "none",
+              }}
+            />
 
-    {/* Sun */}
-    <div
-      className="absolute h-5 w-5 rounded-full"
-      style={{
-        left: `calc(50% - 160px + ${sunProgress * 320}px)`,
-        top: `${100 - Math.sin(sunProgress * Math.PI) * 100}%`,
-        backgroundColor: theme.text,
-        transform: "translate(-50%, -50%)",
-      }}
-    />
-  </>
-)}  
-
+            {/* Sun */}
+            <div
+className="absolute h-5 w-5 rounded-full transition-all duration-1000 ease-out"
+              style={{
+                left: `calc(50% - 120px + ${sunProgress * 240}px)`,
+                top: `${100 - Math.sin(sunProgress * Math.PI) * 100}%`,
+                backgroundColor: theme.text,
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          </>
+        )}
+      </div>
       {/* Sunrise / Sunset */}
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div className="flex items-center gap-3">
-<Sunrise size={28} strokeWidth={1.8} />
+          <Sunrise size={28} strokeWidth={1.8} />
           <div>
             <p className="text-xs" style={{ opacity: 0.6 }}>
               Sunrise

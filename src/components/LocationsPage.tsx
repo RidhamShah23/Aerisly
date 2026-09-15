@@ -20,7 +20,7 @@ function LocationsPage({
 }: LocationsPageProps) {
   const navigate = useNavigate();
   return (
-    <div className="mt-8">
+    <div className="mt-8 animate-fade-in-up" >
       <button
         onClick={() => navigate("/")}
         className="mb-4 p-1.5 bg-blue-900 border-2 rounded-2xl hover:bg-yellow-400 transition-colors flex items-center gap-2 text-sm font-medium"

@@ -23,7 +23,7 @@ function SettingsPage({
   const navigate = useNavigate();
 
   return (
-    <div className="mt-8 max-w-3xl">
+    <div className="mt-8 max-w-3xl animate-fade-in-up">
       <button
   onClick={() => navigate("/")}
   className="mb-4 p-1.5 bg-blue-900 border-2 hover:bg-yellow-400 transition-colors rounded-2xl flex items-center gap-2 text-sm font-medium"

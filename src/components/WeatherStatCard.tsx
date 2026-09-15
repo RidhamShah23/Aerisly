@@ -18,14 +18,14 @@ function WeatherStatCard({
 }: WeatherStatCardProps) {
   return (
     <div
-      className="rounded-2xl p-5 shadow-sm transition-colors duration-500"
+      className="rounded-2xl p-5 shadow-sm transition-all duration-300 hover:-translate-y-1"
       style={{
         backgroundColor: theme.card,
         color: theme.text,
       }}
     >
       <div
-        className="flex h-10 w-10 items-center justify-center rounded-xl"
+        className="flex h-10 w-10 items-center justify-center rounded-xl "
         style={{
           backgroundColor: theme.background,
           color: theme.primary,

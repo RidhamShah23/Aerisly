@@ -284,7 +284,7 @@ callback: (
 
   return (
     <div
-      className="rounded-3xl p-6 shadow-sm transition-colors duration-500"
+      className="rounded-3xl p-6 shadow-sm transition-colors duration-500 animate-fade-in-up"
       style={{
         backgroundColor: theme.card,
         color: theme.text,

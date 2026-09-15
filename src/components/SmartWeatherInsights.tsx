@@ -164,14 +164,14 @@ const visibleInsights =
   insights.slice(0, 4);
   return (
     <div
-      className="rounded-3xl p-6 shadow-sm"
+      className="rounded-3xl p-6 shadow-sm animate-fade-in-up"
       style={{
         backgroundColor: theme.card,
         color: theme.text,
       }}
     >
 
-      <div className="mb-5">
+      <div className="mb-5" >
 
         <h3 className="text-xl font-semibold">
           Smart Weather Insights

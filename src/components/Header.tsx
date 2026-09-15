@@ -119,7 +119,7 @@ const getGreeting = () => {
   <div className="relative w-full md:w-auto">
 
     <div
-      className="flex w-full items-center gap-2 rounded-xl border px-4 py-3 md:w-72"
+className="flex w-full items-center gap-2 rounded-xl border px-4 py-3 transition-all duration-200 focus-within:ring-2 md:w-72"
       style={{
         backgroundColor: theme.card,
         borderColor: theme.mutedText,
@@ -221,7 +221,7 @@ const getGreeting = () => {
 
     <button
       onClick={onCurrentLocation}
-      className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-3 md:flex-none"
+className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:translate-y-0 md:flex-none"
       style={{
         backgroundColor: theme.card,
         borderColor: theme.mutedText,
@@ -236,8 +236,7 @@ const getGreeting = () => {
 
 <button
   onClick={onOpenLocations}
-  className="rounded-xl border p-3 transition"
-  style={{
+className="rounded-xl border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:translate-y-0"  style={{
     backgroundColor: theme.card,
     borderColor: theme.mutedText,
     color: theme.text,
@@ -249,8 +248,7 @@ const getGreeting = () => {
 
 <button
   onClick={onOpenSettings}
-  className="rounded-xl border p-3 transition"
-  style={{
+className="rounded-xl border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:translate-y-0"  style={{
     backgroundColor: theme.card,
     borderColor: theme.mutedText,
     color: theme.text,
