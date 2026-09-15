@@ -1,4 +1,6 @@
 export interface WeatherApiResponse {
+  timezone: string;
+
   current: {
     temperature_2m: number;
     relative_humidity_2m: number;

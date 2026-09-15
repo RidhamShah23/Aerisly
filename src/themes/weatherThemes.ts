@@ -1,5 +1,45 @@
 import type { WeatherCondition, WeatherTheme } from "../types/weather";
 
+export const nightWeatherColors: Record<
+  WeatherCondition,
+  { primary: string; accent: string }
+> = {
+  sunny: {
+    primary: "#FFFFFF",
+    accent: "#E5E7EB",
+  },
+
+  cloudy: {
+    primary: "#94A3B8",
+    accent: "#64748B",
+  },
+
+  rainy: {
+    primary: "#38BDF8",
+    accent: "#0EA5E9",
+  },
+
+  storm: {
+    primary: "#60A5FA",
+    accent: "#FACC15",
+  },
+
+  snow: {
+    primary: "#7DD3FC",
+    accent: "#BAE6FD",
+  },
+
+  fog: {
+    primary: "#8BA79C",
+    accent: "#A8BBB4",
+  },
+
+  "clear-night": {
+    primary: "#FFFFFF",
+    accent: "#E5E7EB",
+  },
+};
+
 export const weatherThemes: Record<
   WeatherCondition,
   WeatherTheme
@@ -59,11 +99,11 @@ export const weatherThemes: Record<
   },
 
   "clear-night": {
-  background: "#050B14",
-  card: "#0D1624",
-  primary: "#38BDF8",
-  accent: "#7DD3FC",
-  text: "#F8FAFC",
-  mutedText: "#94A3B8",
+  background: "#050505",
+  card: "#111111",
+  primary: "#FFFFFF",
+  accent: "#E5E7EB",
+  text: "#FFFFFF",
+  mutedText: "#9CA3AF",
 },
 };

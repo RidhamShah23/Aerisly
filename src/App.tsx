@@ -2,8 +2,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import { useEffect, useState } from "react";
 import Dashboard from "./components/Dashboard";
-import { weatherThemes } from "./themes/weatherThemes";
-
+import { weatherThemes, nightWeatherColors } from "./themes/weatherThemes";
 import { calculateActivityScore } from "./utils/activityUtils";
 
 import type { LocationResult } from "./services/geocodingApi";
@@ -26,12 +25,33 @@ function getUVLevel(uvIndex: number) {
   return "Extreme";
 }
 
-function isNightTime(sunrise: string, sunset: string): boolean {
-  const currentTime = Date.now();
-  const sunriseTime = new Date(sunrise).getTime();
-  const sunsetTime = new Date(sunset).getTime();
+function isNightTime(
+  sunrise: string,
+  sunset: string,
+  timezone: string,
+): boolean {
+  const now = new Date();
 
-  return currentTime < sunriseTime || currentTime > sunsetTime;
+  const locationTime = new Intl.DateTimeFormat("en-CA", {
+    timeZone: timezone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(now);
+
+  const currentMinutes =
+    Number(locationTime.slice(0, 2)) * 60 + Number(locationTime.slice(3, 5));
+
+  const sunriseTime = sunrise.slice(11, 16);
+  const sunsetTime = sunset.slice(11, 16);
+
+  const sunriseMinutes =
+    Number(sunriseTime.slice(0, 2)) * 60 + Number(sunriseTime.slice(3, 5));
+
+  const sunsetMinutes =
+    Number(sunsetTime.slice(0, 2)) * 60 + Number(sunsetTime.slice(3, 5));
+
+  return currentMinutes < sunriseMinutes || currentMinutes > sunsetMinutes;
 }
 
 type SavedLocation = LocationResult & {
@@ -50,7 +70,6 @@ function App() {
     loadWeatherForLocation,
   } = useWeather();
 
-
   const activityWeather = {
     temperature: weather.temperature,
     humidity: weather.humidity,
@@ -66,11 +85,24 @@ function App() {
     ...activity,
     score: calculateActivityScore(activity, activityWeather),
   }));
-const isNight = isNightTime(weather.sunrise, weather.sunset);
 
-const theme = isNight
-  ? weatherThemes["clear-night"]
-  : weatherThemes[weather.condition];
+  const isNight = isNightTime(
+    weather.sunrise,
+    weather.sunset,
+    weather.timezone,
+  );
+
+  const baseTheme = isNight
+    ? weatherThemes["clear-night"]
+    : weatherThemes[weather.condition];
+
+  const theme = isNight
+    ? {
+        ...baseTheme,
+        primary: nightWeatherColors[weather.condition].primary,
+        accent: nightWeatherColors[weather.condition].accent,
+      }
+    : baseTheme;
   const handleCurrentLocation = async () => {
     try {
       const coordinates = await getCurrentLocation();
@@ -86,7 +118,7 @@ const theme = isNight
         country: "",
         admin1: "",
       };
-localStorage.setItem("currentLocation", JSON.stringify(locationResult));
+      localStorage.setItem("currentLocation", JSON.stringify(locationResult));
 
       saveLocation(locationResult);
       await loadWeatherForLocation(
@@ -99,22 +131,21 @@ localStorage.setItem("currentLocation", JSON.stringify(locationResult));
     }
   };
 
-const [savedLocations, setSavedLocations] = useState<SavedLocation[]>(() => {
-  const saved = localStorage.getItem("savedLocations");
+  const [savedLocations, setSavedLocations] = useState<SavedLocation[]>(() => {
+    const saved = localStorage.getItem("savedLocations");
 
-  if (!saved) {
-    return [];
-  }
+    if (!saved) {
+      return [];
+    }
 
-  const locations: SavedLocation[] = JSON.parse(saved);
-  const fifteenDays = 15 * 24 * 60 * 60 * 1000;
+    const locations: SavedLocation[] = JSON.parse(saved);
+    const fifteenDays = 15 * 24 * 60 * 60 * 1000;
 
-  return locations.filter(
-  (location) =>
-    location.savedAt &&
-    Date.now() - location.savedAt < fifteenDays,
-);
-});
+    return locations.filter(
+      (location) =>
+        location.savedAt && Date.now() - location.savedAt < fifteenDays,
+    );
+  });
   useEffect(() => {
     localStorage.setItem("savedLocations", JSON.stringify(savedLocations));
   }, [savedLocations]);
@@ -132,12 +163,12 @@ const [savedLocations, setSavedLocations] = useState<SavedLocation[]>(() => {
       }
 
       return [
-  ...previousLocations,
-  {
-    ...location,
-    savedAt: Date.now(),
-  },
-];
+        ...previousLocations,
+        {
+          ...location,
+          savedAt: Date.now(),
+        },
+      ];
     });
   };
   const removeLocation = (location: LocationResult) => {
@@ -210,7 +241,7 @@ const [savedLocations, setSavedLocations] = useState<SavedLocation[]>(() => {
             path="/"
             element={
               <Dashboard
-              key={weather.city}
+                key={weather.city}
                 weather={weather}
                 theme={theme}
                 forecast={forecast}

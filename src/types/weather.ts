@@ -17,6 +17,7 @@ export type WeatherCondition =
 }
 
 export interface CurrentWeather {
+  timezone: string;
   city: string;
   temperature: number;
   condition: WeatherCondition;

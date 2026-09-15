@@ -29,6 +29,7 @@ function useWeather() {
     visibility: 10000,
     sunrise: "06:00",
     sunset: "18:30",
+    timezone: "Asia/Kolkata",
   });
 
   const [forecast, setForecast] = useState<ForecastDay[]>([]);

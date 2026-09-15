@@ -120,12 +120,13 @@ const visibilityIndex =
     windSpeed: Math.round(
       data.current.wind_speed_10m
     ),
-
+    
     uvIndex: Math.round(
       data.current.uv_index
     ),
     sunrise: data.daily.sunrise[0],
     sunset: data.daily.sunset[0],
+    timezone: data.timezone,
     visibility: data.hourly.visibility[visibilityIndex],
   };
 }
