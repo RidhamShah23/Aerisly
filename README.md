@@ -1,14 +1,14 @@
-# Weatherly 🌤️
+# Aerisly - Smart Weather Dashboard 🌤️
 
 A modern and responsive weather dashboard built with **React, TypeScript, Vite, and Tailwind CSS**.
 
-Weatherly provides current weather information, forecasts, air quality, weather insights, activity recommendations, and location management through a clean and responsive interface.
+Aerisly provides current weather information, forecasts, air quality, weather insights, activity recommendations, and location management through a clean and responsive interface.
 
 ---
 
 ## ✨ Features
 
-- 🌡️ **Current Weather**
+ 🌡️ **Current Weather**
   - Current temperature
   - Weather condition
   - Feels-like temperature
@@ -16,50 +16,43 @@ Weatherly provides current weather information, forecasts, air quality, weather 
   - Wind speed
   - UV index
   - Visibility
-  - Sunrise and sunset
 
-- 📅 **5-Day Weather Forecast**
+ 📅 **5-Day Weather Forecast**
   - Daily weather conditions
   - Temperature information
   - Weather icons
 
-- 📈 **Hourly Weather**
+ 📈 **Hourly Weather**
   - Hourly temperature information
   - Rain/weather indicators
 
-- 🌫️ **Air Quality**
+ 🌫️ **Air Quality**
   - Air quality information
-  - Indian AQI-based categories
+  - Air Quality monitoring with US AQI and pollutant levels
   - Pollutant-based data
 
-- 💡 **Smart Weather Insights**
+ 💡 **Smart Weather Insights**
   - Weather-based insights and useful information
 
-- 🏃 **Activity Recommendations**
+ 🏃 **Activity Recommendations**
   - Weather-based activity suggestions
   - Activity suitability scores
 
-- 📍 **Location Management**
+ 📍 **Location Management**
   - Search for cities
   - Current location detection
   - Save frequently used locations
   - Remove saved locations
   - Saved locations automatically expire after 15 days
 
-- ⚙️ **Settings**
+ ⚙️ **Settings**
   - Temperature unit: Celsius / Fahrenheit
   - Wind speed unit: km/h / mph
 
-- 🌓 **Responsive UI & Theme**
+ 🌓 **Responsive UI & Theme**
   - Responsive design for different screen sizes
   - Weather-based visual themes
   - Light/dark interface support
-
-- 🔀 **Client-Side Routing**
-  - Dashboard
-  - Locations
-  - Settings
-  - Custom 404 page
 
 ---
 
@@ -77,8 +70,9 @@ Weatherly provides current weather information, forecasts, air quality, weather 
 
 - Open-Meteo Weather API
 - Open-Meteo Air Quality API
+- Open-Meteo Geocoding API
+- OpenStreetMap Nominatim API
 - Browser Geolocation API
-- LocalStorage
 
 ### Development
 
@@ -92,7 +86,7 @@ Weatherly provides current weather information, forecasts, air quality, weather 
 ## 📁 Project Structure
 
 ```text
-Weatherly/
+Aerisly/
 ├── public/
 │
 ├── src/
@@ -104,32 +98,31 @@ Weatherly/
 │   │   ├── ForecastCard.tsx
 │   │   ├── Header.tsx
 │   │   ├── LocationsPage.tsx
-│   │   ├── NotFoundPage.tsx
 │   │   ├── SettingsPage.tsx
 │   │   ├── SmartWeatherInsights.tsx
-│   │   ├── SunCard.tsx
 │   │   ├── TemperatureChart.tsx
+│   │   ├── WeatherSkeleton.tsx
 │   │   └── WeatherStatCard.tsx
 │   │
 │   ├── constants/
-│   │   └── activities.ts
-│   │
 │   ├── hooks/
-│   │   └── useWeather.ts
+│   ├── pages/
 │   │
 │   ├── services/
 │   │   ├── airQualityApi.ts
+│   │   ├── geocodingApi.ts
+│   │   ├── location.ts
 │   │   └── weatherApi.ts
 │   │
+│   ├── themes/
 │   ├── types/
-│   │   └── weather.ts
-│   │
 │   ├── utils/
-│   │   └── weatherUtils.ts
 │   │
 │   ├── App.tsx
+│   ├── index.css
 │   └── main.tsx
-└── README.md
+├── README.md
+
 ```
 
 ---
@@ -145,7 +138,7 @@ git clone https://github.com/RidhamShah23/Weather-Dashboard.git
 ### 2. Navigate to the project
 
 ```bash
-cd Weatherly
+cd Aerisly
 ```
 
 ### 3. Install dependencies
@@ -160,19 +153,13 @@ npm install
 npm run dev
 ```
 
-The application will be available at the local development URL shown by Vite.
-
 ---
 
 ## 🏗️ Production Build
 
-Create an optimized production build with:
-
 ```bash
 npm run build
 ```
-
-To preview the production build locally:
 
 ```bash
 npm run preview
@@ -182,11 +169,11 @@ npm run preview
 
 ## 🌐 APIs
 
-Weatherly uses the following services:
+Aerisly uses the following services:
 
 ### Open-Meteo
 
-Weather data is retrieved from the Open-Meteo API.
+Weather data is retrieved from the [Open-Meteo](https://open-meteo.com/) API.
 
 The application uses weather information such as:
 
@@ -195,17 +182,18 @@ The application uses weather information such as:
 - Wind speed
 - UV index
 - Visibility
-- Sunrise/sunset
 - Hourly weather
 - Daily forecast
 
-Air quality information is retrieved through the Open-Meteo Air Quality API.
+Air quality information is retrieved through the [Open-Meteo Air Quality API](https://open-meteo.com/en/docs/air-quality-api).
+
+Weather data is provided by Open-Meteo.
 
 ---
 
 ## 📍 Location Handling
 
-Weatherly supports location-based weather searches through:
+Aerisly supports location-based weather searches through:
 
 - City search
 - Browser geolocation
@@ -215,7 +203,7 @@ Weatherly supports location-based weather searches through:
 
 ## 🎨 UI & Design
 
-Weatherly uses a responsive dashboard layout designed to provide weather information at a glance.
+Aerisly uses a responsive dashboard layout designed to provide weather information at a glance.
 
 The interface includes:
 
@@ -240,15 +228,6 @@ Contains reusable UI components and application pages.
 
 Contains custom React hooks for managing application logic.
 
-For example, `useWeather.ts` handles:
-
-- Weather API requests
-- Air quality requests
-- Weather state
-- Loading state
-- Error state
-- Weather data transformation flow
-
 ### `services/`
 
 Contains API-related logic.
@@ -267,30 +246,9 @@ Contains static application data such as activity definitions.
 
 ---
 
-## 🎯 Learning Goals
-
-This project was built to practice and demonstrate:
-
-- React fundamentals
-- TypeScript
-- React Hooks
-- Custom Hooks
-- Component architecture
-- API integration
-- Async JavaScript
-- State management
-- LocalStorage
-- Client-side routing
-- Responsive UI development
-- Tailwind CSS
-- Error and loading state handling
-- Git and GitHub workflow
-
----
-
 ## 👨‍💻 Author
 
-**Your Name**
+**RIDHAM SHAH**
 
 - GitHub: `https://github.com/RidhamShah23`
 - LinkedIn: `https://www.linkedin.com/in/ridham-shah-825561285`

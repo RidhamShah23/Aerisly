@@ -183,6 +183,20 @@ function Dashboard({
                 <AirQuality airQuality={airQuality} theme={theme} />
               )}
             </div>
+            <p
+              className="mt-8 pb-4 text-center text-xs"
+              style={{ color: theme.mutedText }}
+            >
+              Weather data provided by{" "}
+              <a
+                href="https://open-meteo.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline transition-opacity hover:opacity-70"
+              >
+                Open-Meteo
+              </a>
+            </p>
           </div>
         </div>
       )}

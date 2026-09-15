@@ -163,38 +163,30 @@ const OZONE_BREAKPOINTS: Breakpoint[] = [
 
 function calculateSubIndex(
   concentration: number,
-  breakpoints: Breakpoint[]
+  breakpoints: Breakpoint[],
 ): number | null {
-
   if (!Number.isFinite(concentration)) {
     return null;
   }
 
-  const breakpoint =
-    breakpoints.find(
-      (item) =>
-        concentration >= item.concentrationLow &&
-        concentration <= item.concentrationHigh
-    );
+  const breakpoint = breakpoints.find(
+    (item) =>
+      concentration >= item.concentrationLow &&
+      concentration <= item.concentrationHigh,
+  );
 
   if (!breakpoint) {
     return null;
   }
 
-  const {
-    concentrationLow,
-    concentrationHigh,
-    aqiLow,
-    aqiHigh,
-  } = breakpoint;
+  const { concentrationLow, concentrationHigh, aqiLow, aqiHigh } = breakpoint;
 
   if (concentrationHigh === Infinity) {
     return 500;
   }
 
   const index =
-    ((aqiHigh - aqiLow) /
-      (concentrationHigh - concentrationLow)) *
+    ((aqiHigh - aqiLow) / (concentrationHigh - concentrationLow)) *
       (concentration - concentrationLow) +
     aqiLow;
 
@@ -202,76 +194,44 @@ function calculateSubIndex(
 }
 
 function average(values: number[]): number {
-  const validValues = values.filter(
-    (value) => Number.isFinite(value)
-  );
+  const validValues = values.filter((value) => Number.isFinite(value));
 
   if (validValues.length === 0) {
     return 0;
   }
 
   return (
-    validValues.reduce(
-      (sum, value) => sum + value,
-      0
-    ) / validValues.length
+    validValues.reduce((sum, value) => sum + value, 0) / validValues.length
   );
 }
 
-export function calculateIndianAQI(
-  data: {
-    pm10: number[];
-    pm25: number[];
-    nitrogenDioxide: number[];
-    ozone: number[];
-  }
-): number {
+export function calculateIndianAQI(data: {
+  pm10: number[];
+  pm25: number[];
+  nitrogenDioxide: number[];
+  ozone: number[];
+}): number {
+  const pm10Average = average(data.pm10);
 
-  const pm10Average = average(
-    data.pm10
-  );
+  const pm25Average = average(data.pm25);
 
-  const pm25Average = average(
-    data.pm25
-  );
-
-  const no2Average = average(
-    data.nitrogenDioxide
-  );
+  const no2Average = average(data.nitrogenDioxide);
 
   // CPCB uses an 8-hour averaging period
   // for ozone.
-  const ozoneValues =
-    data.ozone.slice(-8);
+  const ozoneValues = data.ozone.slice(-8);
 
-  const ozoneAverage = average(
-    ozoneValues
-  );
+  const ozoneAverage = average(ozoneValues);
 
   const subIndices = [
-    calculateSubIndex(
-      pm10Average,
-      PM10_BREAKPOINTS
-    ),
+    calculateSubIndex(pm10Average, PM10_BREAKPOINTS),
 
-    calculateSubIndex(
-      pm25Average,
-      PM25_BREAKPOINTS
-    ),
+    calculateSubIndex(pm25Average, PM25_BREAKPOINTS),
 
-    calculateSubIndex(
-      no2Average,
-      NO2_BREAKPOINTS
-    ),
+    calculateSubIndex(no2Average, NO2_BREAKPOINTS),
 
-    calculateSubIndex(
-      ozoneAverage,
-      OZONE_BREAKPOINTS
-    ),
-  ].filter(
-    (value): value is number =>
-      value !== null
-  );
+    calculateSubIndex(ozoneAverage, OZONE_BREAKPOINTS),
+  ].filter((value): value is number => value !== null);
 
   if (subIndices.length === 0) {
     return 0;
