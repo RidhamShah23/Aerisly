@@ -1,4 +1,4 @@
-import { Sun, Sunrise, Sunset } from "lucide-react";
+import { Sun, Moon, Sunrise, Sunset } from "lucide-react";
 import type { CurrentWeather } from "../types/weather";
 import type { WeatherTheme } from "../types/weather";
 
@@ -51,23 +51,30 @@ export default function SunCard({ weather, theme }: SunCardProps) {
     >
       {/* Header */}
       <div className="flex items-start justify-between">
-        <div>
-          <h3 className="text-2xl font-semibold">
-            {daytime ? "Day" : "Night"}
-          </h3>
+  <div className="flex-1 text-center">
+    <h3 className="text-2xl flex font-semibold">
+      {daytime ? "Day" : "Night"}
+    </h3>
 
-          <p className="mt-1 text-sm" style={{ opacity: 0.7 }}>
-            {daytime ? weather.condition : "The sun has set"}
-          </p>
-        </div>
+    <p
+      className="text-4xl font-bold"
+      style={{ opacity: 0.7 }}
+    >
+      {daytime ? weather.condition : "The Sun Has Set"}
+    </p>
+  </div>
 
-        <div className="flex items-center gap-2">
-          <Sun size={24} strokeWidth={2} />
-          <span className="text-2xl font-medium">{weather.temperature}°C</span>
-        </div>
-      </div>
+  <div className="flex items-center gap-2">
+  {daytime ? (
+    <Sun size={24} strokeWidth={2} />
+  ) : (
+    <Moon size={24} strokeWidth={2} />
+  )}
 
-      {/* Sun Area */}
+  <span className="text-2xl font-medium">{weather.temperature}°C</span>
+</div>
+</div>
+
       {/* Sun Area */}
       <div className="relative mt-4 h-28">
         {daytime && (
@@ -84,7 +91,7 @@ export default function SunCard({ weather, theme }: SunCardProps) {
 
             {/* Sun */}
             <div
-className="absolute h-5 w-5 rounded-full transition-all duration-1000 ease-out"
+              className="absolute h-5 w-5 rounded-full transition-all duration-1000 ease-out"
               style={{
                 left: `calc(50% - 120px + ${sunProgress * 240}px)`,
                 top: `${100 - Math.sin(sunProgress * Math.PI) * 100}%`,

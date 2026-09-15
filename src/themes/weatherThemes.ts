@@ -59,11 +59,11 @@ export const weatherThemes: Record<
   },
 
   "clear-night": {
-    background: "#111827",
-    card: "#1E293B",
-    primary: "#8B9CF6",
-    accent: "#C4B5FD",
-    text: "#F8FAFC",
-    mutedText: "#94A3B8",
-  },
+  background: "#050B14",
+  card: "#0D1624",
+  primary: "#38BDF8",
+  accent: "#7DD3FC",
+  text: "#F8FAFC",
+  mutedText: "#94A3B8",
+},
 };

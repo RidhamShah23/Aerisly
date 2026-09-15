@@ -59,7 +59,7 @@ function Dashboard({
         <div className="mt-8 animate-fade-in-up">
           {error && (
             <div
-              className="mt-6 rounded-2xl p-4 text-center text-sm"
+              className="mt-8 rounded-2xl p-4 text-center text-sm"
               style={{
                 backgroundColor: theme.card,
                 color: theme.text,
@@ -113,7 +113,7 @@ function Dashboard({
                   icon={Eye}
                   label="Visibility"
                   value={`${displayVisibility} km`}
-                  description=""
+                  description="Fair"
                   theme={theme}
                 />
               </div>

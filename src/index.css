@@ -43,3 +43,9 @@
 .animate-delay-300 {
   animation-delay: 300ms;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none !important;
+  }
+}

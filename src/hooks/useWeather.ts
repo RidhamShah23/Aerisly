@@ -74,9 +74,22 @@ const [isLoading, setIsLoading] = useState(true);
 [],
   );
 
-  useEffect(() => {
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  loadWeatherForLocation(23.0225, 72.5714, "Ahmedabad");
+  
+ useEffect(() => {
+  const saved = localStorage.getItem("currentLocation");
+
+  if (saved) {
+    const location = JSON.parse(saved);
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadWeatherForLocation(
+      location.latitude,
+      location.longitude,
+      location.name,
+    );
+  } else {
+    loadWeatherForLocation(23.0225, 72.5714, "Ahmedabad");
+  }
 }, [loadWeatherForLocation]);
 
   return {

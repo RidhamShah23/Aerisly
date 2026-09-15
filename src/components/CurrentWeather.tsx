@@ -1,5 +1,6 @@
 import {
   Sun,
+  Moon,
   Cloud,
   CloudRain,
   CloudLightning,
@@ -149,6 +150,15 @@ function WeatherIcon({
           style={{ color }}
         />
       );
+
+      case "clear-night":
+  return (
+    <Moon
+      size={100}
+      strokeWidth={1.8}
+      style={{ color }}
+    />
+  );
 
     default:
       return (

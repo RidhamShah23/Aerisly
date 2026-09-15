@@ -26,6 +26,14 @@ function getUVLevel(uvIndex: number) {
   return "Extreme";
 }
 
+function isNightTime(sunrise: string, sunset: string): boolean {
+  const currentTime = Date.now();
+  const sunriseTime = new Date(sunrise).getTime();
+  const sunsetTime = new Date(sunset).getTime();
+
+  return currentTime < sunriseTime || currentTime > sunsetTime;
+}
+
 type SavedLocation = LocationResult & {
   savedAt: number;
 };
@@ -42,6 +50,7 @@ function App() {
     loadWeatherForLocation,
   } = useWeather();
 
+
   const activityWeather = {
     temperature: weather.temperature,
     humidity: weather.humidity,
@@ -57,8 +66,11 @@ function App() {
     ...activity,
     score: calculateActivityScore(activity, activityWeather),
   }));
-  const theme = weatherThemes[weather.condition];
+const isNight = isNightTime(weather.sunrise, weather.sunset);
 
+const theme = isNight
+  ? weatherThemes["clear-night"]
+  : weatherThemes[weather.condition];
   const handleCurrentLocation = async () => {
     try {
       const coordinates = await getCurrentLocation();
@@ -71,10 +83,10 @@ function App() {
         name: location.city,
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
-
         country: "",
         admin1: "",
       };
+localStorage.setItem("currentLocation", JSON.stringify(locationResult));
 
       saveLocation(locationResult);
       await loadWeatherForLocation(
@@ -138,6 +150,7 @@ const [savedLocations, setSavedLocations] = useState<SavedLocation[]>(() => {
     );
   };
   const handleCitySelect = async (location: LocationResult) => {
+    localStorage.setItem("currentLocation", JSON.stringify(location));
     saveLocation(location);
 
     await loadWeatherForLocation(
@@ -197,6 +210,7 @@ const [savedLocations, setSavedLocations] = useState<SavedLocation[]>(() => {
             path="/"
             element={
               <Dashboard
+              key={weather.city}
                 weather={weather}
                 theme={theme}
                 forecast={forecast}
