@@ -25,6 +25,15 @@ function CurrentWeather({
   theme,
   displayTemperature,
 }: CurrentWeatherProps) {
+    const isNight = isNightTime(
+    weather.sunrise,
+    weather.sunset,
+    weather.timezone,
+  );
+
+  const displayCondition = isNight
+    ? "clear-night"
+    : weather.condition;
 
   return (
     <div
@@ -62,8 +71,10 @@ function CurrentWeather({
               color: theme.mutedText,
             }}
           >
-           {weather.condition.charAt(0).toUpperCase() +
-            weather.condition.slice(1)}
+           {displayCondition === "clear-night"
+  ? "Clear Night"
+  : displayCondition.charAt(0).toUpperCase() +
+    displayCondition.slice(1)}
           </p>
 
           <p
@@ -80,8 +91,8 @@ function CurrentWeather({
 
         <div className="shrink-0">
   <WeatherIcon
-    condition={weather.condition}
-    color={theme.primary}
+  condition={displayCondition}
+  color={theme.primary}
   />
 </div>
 
@@ -89,6 +100,41 @@ function CurrentWeather({
     </div>
   );
 }
+function isNightTime(
+  sunrise: string,
+  sunset: string,
+  timezone: string,
+): boolean {
+  const now = new Date();
+
+  const locationTime = new Intl.DateTimeFormat("en-CA", {
+    timeZone: timezone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(now);
+
+  const currentMinutes =
+    Number(locationTime.slice(0, 2)) * 60 +
+    Number(locationTime.slice(3, 5));
+
+  const sunriseTime = sunrise.slice(11, 16);
+  const sunsetTime = sunset.slice(11, 16);
+
+  const sunriseMinutes =
+    Number(sunriseTime.slice(0, 2)) * 60 +
+    Number(sunriseTime.slice(3, 5));
+
+  const sunsetMinutes =
+    Number(sunsetTime.slice(0, 2)) * 60 +
+    Number(sunsetTime.slice(3, 5));
+
+  return (
+    currentMinutes < sunriseMinutes ||
+    currentMinutes > sunsetMinutes
+  );
+}
+
 function WeatherIcon({
   condition,
   color,
