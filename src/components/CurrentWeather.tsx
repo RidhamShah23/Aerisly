@@ -31,7 +31,8 @@ function CurrentWeather({
     weather.timezone,
   );
 
-  const displayCondition = isNight
+  const displayCondition =
+  isNight && weather.condition === "sunny"
     ? "clear-night"
     : weather.condition;
 
